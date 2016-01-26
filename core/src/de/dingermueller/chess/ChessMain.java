@@ -14,6 +14,7 @@ public class ChessMain extends ApplicationAdapter {
 	public void create () {
 		batch = new SpriteBatch();
 		img = new Texture("badlogic.jpg");
+		System.out.println("Dahl");
 	}
 
 	@Override
