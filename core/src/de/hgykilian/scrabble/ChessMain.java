@@ -1,4 +1,4 @@
-package de.dingermueller.chess;
+package de.hgykilian.scrabble;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
