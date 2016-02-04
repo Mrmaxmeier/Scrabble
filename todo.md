@@ -1,0 +1,16 @@
+TODOs:
+- [ ] Scrabble machen
+  - [x] libgdx einrichten
+  - [ ] Spuren von Schach entfernen
+  - [ ] Grafik machen
+    - [ ] toll machen
+  - [ ] Wortlistenzeugs
+    - [ ] Deutsche Wortliste
+    - [ ] duden scrapen
+  - [ ] Lan-Multiplayer
+  - [ ] Statistik (DB)
+- [ ] Organisatorisches
+  - [ ] 1. Meilenstein `12. 2`
+  - [ ] 2. Meilenstein `8. 4`
+  - [ ] 3. Meilenstein `TBD`
+  - [ ] UMLs generieren
