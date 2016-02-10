@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="src" path="/Chess-core"/>
+	<classpathentry kind="src" path="/Scrabble-core"/>
 	<classpathentry kind="src" path="assets"/>
 	<classpathentry kind="lib" path="lib/gdx-1.9.0.jar"/>
 	<classpathentry kind="lib" path="lib/gdx-backend-headless-1.9.0.jar"/>

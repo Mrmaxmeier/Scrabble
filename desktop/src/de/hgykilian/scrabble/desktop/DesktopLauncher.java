@@ -9,8 +9,8 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title = "Scrabble";
-		config.width= 800;
-		config.height = 800;
+		config.width= 550;
+		config.height = 550;
 		new LwjglApplication(new ChessMain(), config);
 	}
 }
