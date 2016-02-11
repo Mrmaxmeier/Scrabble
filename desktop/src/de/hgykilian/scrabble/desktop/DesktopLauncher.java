@@ -3,7 +3,7 @@ package de.hgykilian.scrabble.desktop;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
-import de.hgykilian.scrabble.ChessMain;
+import de.hgykilian.scrabble.ScrabbleMain;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
@@ -11,6 +11,6 @@ public class DesktopLauncher {
 		config.title = "Scrabble";
 		config.width= 550;
 		config.height = 550;
-		new LwjglApplication(new ChessMain(), config);
+		new LwjglApplication(new ScrabbleMain(), config);
 	}
 }
