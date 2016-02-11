@@ -23,6 +23,11 @@ public class ScrabbleMain extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
 		batch.draw(board_tex, 0, 0);
+		for (Field[] row : game.board.fields) {
+			for (Field field : row) {
+				field.draw();
+			}
+		}
 		batch.end();
 	}
 }

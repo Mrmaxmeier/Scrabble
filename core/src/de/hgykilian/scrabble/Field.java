@@ -1,6 +1,21 @@
 package de.hgykilian.scrabble;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 public class Field {
+	/*
+	 * 24 × doppelter Buchstabenwert (hellblaue Felder),
+	 * 16 × doppelter Wortwert (rosafarbene Felder),
+	 * 12 × dreifacher Buchstabenwert (dunkelblaue Felder),
+	 * 8 × dreifacher Wortwert (rote Felder).
+	 */
+
+	public enum Bonus {
+		NONE,
+		DOUBLE_LETTER, DOUBLE_WORD,
+		TRIPLE_LETTER, TRIPLE_WORD
+	}
+
 	Character currentChar;
 	public Player player;
 	int x;
@@ -11,49 +26,80 @@ public class Field {
 		this.y = y;
 	}
 	
-	FieldBonus getFieldBonus() {
+	Bonus getBonus() {
 		int tmpX = Math.abs(x);
 		int tmpY = Math.abs(y);
 		if (tmpX == tmpY) {
 			switch (tmpX) {
 			case 1:
-				return FieldBonus.DOUBLE_LETTER;
+				return Bonus.DOUBLE_LETTER;
 			case 2:
-				return FieldBonus.TRIPPLE_LETTER;
+				return Bonus.TRIPLE_LETTER;
 			case 3:
 			case 4:
 			case 5:
 			case 6:
-				return FieldBonus.DOUBLE_WORD;
+				return Bonus.DOUBLE_WORD;
 			case 7:
-				return FieldBonus.TRIPPLE_WORD;
+				return Bonus.TRIPLE_WORD;
 			}
 		}
 		
 		if (tmpX == 0 && tmpY == 4 || tmpX == 4 && tmpY == 0) {
-			return FieldBonus.DOUBLE_LETTER;
+			return Bonus.DOUBLE_LETTER;
 		}
 		
 		if (tmpX == 1 && tmpY == 5 || tmpX == 5 && tmpY == 1) {
-			return FieldBonus.DOUBLE_LETTER;
+			return Bonus.DOUBLE_LETTER;
 		}
 	
 		if (tmpX == 2 && tmpY == 6 || tmpX == 6 && tmpY == 2) {
-			return FieldBonus.TRIPPLE_LETTER;
+			return Bonus.TRIPLE_LETTER;
 		}
 		
 		if (tmpX == 4 && tmpY == 7 || tmpX == 7 && tmpY == 4) {
-			return FieldBonus.DOUBLE_LETTER;
+			return Bonus.DOUBLE_LETTER;
 		}
 		
 		if (tmpX == 0 && tmpY == 7 || tmpX == 7 && tmpY == 0) {
-			return FieldBonus.TRIPPLE_WORD;
+			return Bonus.TRIPLE_WORD;
 		}
 		
-		return FieldBonus.NONE;
+		return Bonus.NONE;
 	}
 
 	public boolean hasChar() {
 		return this.currentChar != null;
+	}
+
+	public int getLetterScore() {
+		int score = 1;
+		if ("ENSIRTUAD".indexOf(currentChar.charValue()) != -1) {
+			score = 1;
+		} else if ("HGLO".indexOf(currentChar.charValue()) != -1) {
+			score = 2;
+		} else if ("MBWZ".indexOf(currentChar.charValue()) != -1) {
+			score = 3;
+		} else if ("CFKP".indexOf(currentChar.charValue()) != -1) {
+			score = 4;
+		} else if ("ÄJÜV".indexOf(currentChar.charValue()) != -1) {
+			score = 6;
+		} else if ("ÖX".indexOf(currentChar.charValue()) != -1) {
+			score = 8;
+		} else if ("QY".indexOf(currentChar.charValue()) != -1) {
+			score = 10;
+		}
+
+		switch (getBonus()) {
+		case DOUBLE_LETTER:
+			return score * 2;
+		case TRIPLE_LETTER:
+			return score * 2;
+		default:
+			return score;
+		}
+	}
+
+	public void draw() {
 	}
 }

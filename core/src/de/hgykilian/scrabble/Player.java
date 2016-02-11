@@ -1,7 +1,7 @@
 package de.hgykilian.scrabble;
 
 public class Player {
-	Field[] fields;
+	Word[] words;
 	char[] chars;
 	int score;
 }
