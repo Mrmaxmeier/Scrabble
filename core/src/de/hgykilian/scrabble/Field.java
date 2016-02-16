@@ -115,13 +115,41 @@ public class Field {
 	}
 
 	public void draw(ShapeRenderer shapeRenderer) {
-        shapeRenderer.setColor(Color.GREEN);
+		switch (getBonus()) {
+		case DOUBLE_WORD:
+			shapeRenderer.setColor(227f/255, 102f/255, 179f/255, 1);
+			break;
+		case TRIPLE_WORD:
+			shapeRenderer.setColor(Color.RED);
+			break;
+		case DOUBLE_LETTER:
+			shapeRenderer.setColor(51f/255, 191f/255, 222f/255, 1);
+			break;
+		case TRIPLE_LETTER:
+			shapeRenderer.setColor(51f/255, 105f/255, 222f/255, 1);
+			break;
+		default:
+			if (x == 0 && y == 0) {
+				shapeRenderer.setColor(Color.WHITE);
+			} else {
+				shapeRenderer.setColor(Color.GREEN);
+			}
+		}
         shapeRenderer.rect(getCoordX(), getCoordY(), fieldSize, fieldSize);
 	}
 	
 	public void drawText(SpriteBatch batch, BitmapFont font) {
         if (hasChar()) {
+        	font.getData().setScale(1);
         	font.draw(batch, currentChar.toString(), getCoordX() + fieldSize/3, getCoordY()+fieldSize*0.7f);
+        	if (getLetterScore() != 10){
+        		font.getData().setScale(0.75f);
+            	font.draw(batch, String.valueOf(getLetterScore()), getCoordX() + fieldSize*2/3, getCoordY()+fieldSize*0.4f);
+        	}else{
+        		font.getData().setScale(0.75f, 0.5f);
+            	font.draw(batch, String.valueOf(getLetterScore()), getCoordX() + fieldSize*2/3, getCoordY()+fieldSize*0.4f);
+        	}
+        	
         }
 	}
 }
