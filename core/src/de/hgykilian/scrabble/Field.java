@@ -1,6 +1,9 @@
 package de.hgykilian.scrabble;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 public class Field {
 	/*
@@ -100,6 +103,10 @@ public class Field {
 		}
 	}
 
-	public void draw() {
+	public void draw(ShapeRenderer shapeRenderer) {
+		int fieldSize = 30;
+		int gap = 2;
+        shapeRenderer.setColor(Color.GREEN);
+        shapeRenderer.rect(36 + (x+7)*(fieldSize+gap), 36 + (y+7)*(fieldSize+gap), fieldSize, fieldSize);
 	}
 }
