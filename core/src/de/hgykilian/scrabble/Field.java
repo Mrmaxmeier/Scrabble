@@ -1,6 +1,7 @@
 package de.hgykilian.scrabble;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -23,6 +24,8 @@ public class Field {
 	public Player player;
 	int x;
 	int y;
+	static int fieldSize = 30;
+	static int gap = 2;
 	
 	public Field(int x, int y) {
 		this.x = x;
@@ -102,11 +105,23 @@ public class Field {
 			return score;
 		}
 	}
+	
+	public int getCoordX() {
+		return 36 + (x+7) * (fieldSize+gap);
+	}
+	
+	public int getCoordY() {
+		return 36 + (-y+7) * (fieldSize+gap);
+	}
 
 	public void draw(ShapeRenderer shapeRenderer) {
-		int fieldSize = 30;
-		int gap = 2;
         shapeRenderer.setColor(Color.GREEN);
-        shapeRenderer.rect(36 + (x+7)*(fieldSize+gap), 36 + (y+7)*(fieldSize+gap), fieldSize, fieldSize);
+        shapeRenderer.rect(getCoordX(), getCoordY(), fieldSize, fieldSize);
+	}
+	
+	public void drawText(SpriteBatch batch, BitmapFont font) {
+        if (hasChar()) {
+        	font.draw(batch, currentChar.toString(), getCoordX() + fieldSize/3, getCoordY()+fieldSize*0.7f);
+        }
 	}
 }
