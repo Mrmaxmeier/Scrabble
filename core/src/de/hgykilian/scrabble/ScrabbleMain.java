@@ -26,6 +26,7 @@ public class ScrabbleMain extends ApplicationAdapter {
 		board_tex = new Texture("scrabble_map.png");
 		game.board.fields[0][0].currentChar = new Character('A');
 		game.board.fields[2][3].currentChar = new Character('B');
+		game.board.fields[7][7].currentChar = new Character('Q');
 	}
 
 	@Override
