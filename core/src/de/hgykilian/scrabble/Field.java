@@ -115,7 +115,26 @@ public class Field {
 	}
 
 	public void draw(ShapeRenderer shapeRenderer) {
-        shapeRenderer.setColor(Color.GREEN);
+		switch (getBonus()) {
+		case DOUBLE_WORD:
+			shapeRenderer.setColor(227f/255, 102f/255, 179f/255, 1);
+			break;
+		case TRIPLE_WORD:
+			shapeRenderer.setColor(Color.RED);
+			break;
+		case DOUBLE_LETTER:
+			shapeRenderer.setColor(51f/255, 191f/255, 222f/255, 1);
+			break;
+		case TRIPLE_LETTER:
+			shapeRenderer.setColor(51f/255, 105f/255, 222f/255, 1);
+			break;
+		default:
+			if (x == 0 && y == 0) {
+				shapeRenderer.setColor(Color.WHITE);
+			} else {
+				shapeRenderer.setColor(Color.GREEN);
+			}
+		}
         shapeRenderer.rect(getCoordX(), getCoordY(), fieldSize, fieldSize);
 	}
 	
