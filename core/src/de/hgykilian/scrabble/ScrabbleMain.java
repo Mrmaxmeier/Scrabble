@@ -13,7 +13,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 public class ScrabbleMain extends ApplicationAdapter {
 	SpriteBatch batch;
 	ShapeRenderer shapeRenderer;
-	Texture board_tex;
 	Scrabble game = new Scrabble();
 	BitmapFont font;
 	
@@ -23,22 +22,31 @@ public class ScrabbleMain extends ApplicationAdapter {
 		shapeRenderer = new ShapeRenderer();
 		font = new BitmapFont();
 		font.setColor(Color.BLUE);
-		board_tex = new Texture("scrabble_map.png");
-		game.board.fields[0][0].currentChar = new Character('A');
-		game.board.fields[2][3].currentChar = new Character('B');
-		game.board.fields[7][7].currentChar = new Character('Q');
+		
+		
+		game.addPlayer(new Player());
+		
+		int i = 0;
+		for (Field[] row : game.board.fields) {
+			for (Field field : row) {
+				if (i % 4 == 0) {
+					field.currentChar = game.popChar();
+				}
+				i++;
+			}
+		}
 	}
 
 	@Override
 	public void render () {
-		Gdx.gl.glClearColor(1, 0, 0, 1);
+		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
-		batch.begin();
-		batch.draw(board_tex, 0, 0);
-		batch.end();
+
 
         shapeRenderer.begin(ShapeType.Filled);
+        shapeRenderer.setColor(0, 0, 0, 1);
+    	shapeRenderer.rect(34, 34, 482, 482);
 		for (Field[] row : game.board.fields) {
 			for (Field field : row) {
 				field.draw(shapeRenderer);
@@ -52,6 +60,7 @@ public class ScrabbleMain extends ApplicationAdapter {
 				field.drawText(batch, font);
 			}
 		}
+        game.board.drawRand(batch, font);
 		batch.end();
 	}
 }

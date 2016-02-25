@@ -140,15 +140,15 @@ public class Field {
 	
 	public void drawText(SpriteBatch batch, BitmapFont font) {
         if (hasChar()) {
-        	font.getData().setScale(1);
         	font.draw(batch, currentChar.toString(), getCoordX() + fieldSize/3, getCoordY()+fieldSize*0.7f);
         	if (getLetterScore() != 10){
         		font.getData().setScale(0.75f);
             	font.draw(batch, String.valueOf(getLetterScore()), getCoordX() + fieldSize*2/3, getCoordY()+fieldSize*0.4f);
-        	}else{
+        	} else {
         		font.getData().setScale(0.65f, 0.75f);
             	font.draw(batch, String.valueOf(getLetterScore()), getCoordX() + fieldSize*2/3, getCoordY()+fieldSize*0.4f);
         	}
+        	font.getData().setScale(1);
         	
         }
 	}
