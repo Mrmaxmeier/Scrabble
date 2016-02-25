@@ -146,7 +146,7 @@ public class Field {
         		font.getData().setScale(0.75f);
             	font.draw(batch, String.valueOf(getLetterScore()), getCoordX() + fieldSize*2/3, getCoordY()+fieldSize*0.4f);
         	}else{
-        		font.getData().setScale(0.75f, 0.5f);
+        		font.getData().setScale(0.65f, 0.75f);
             	font.draw(batch, String.valueOf(getLetterScore()), getCoordX() + fieldSize*2/3, getCoordY()+fieldSize*0.4f);
         	}
         	
