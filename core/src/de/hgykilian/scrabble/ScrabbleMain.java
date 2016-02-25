@@ -24,9 +24,19 @@ public class ScrabbleMain extends ApplicationAdapter {
 		font = new BitmapFont();
 		font.setColor(Color.BLUE);
 		board_tex = new Texture("scrabble_map.png");
-		game.board.fields[0][0].currentChar = new Character('A');
-		game.board.fields[2][3].currentChar = new Character('B');
-		game.board.fields[7][7].currentChar = new Character('Q');
+		
+		
+		game.addPlayer(new Player());
+		
+		int i = 0;
+		for (Field[] row : game.board.fields) {
+			for (Field field : row) {
+				if (i % 4 == 0) {
+					field.currentChar = game.popChar();
+				}
+				i++;
+			}
+		}
 	}
 
 	@Override
