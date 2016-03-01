@@ -132,7 +132,7 @@ public class Field {
 			if (x == 0 && y == 0) {
 				shapeRenderer.setColor(Color.WHITE);
 			} else {
-				shapeRenderer.setColor(Color.GREEN);
+				shapeRenderer.setColor(Color.FOREST);
 			}
 		}
         shapeRenderer.rect(getCoordX(), getCoordY(), fieldSize, fieldSize);
