@@ -75,4 +75,11 @@ public class Scrabble {
 			currentPlayer = 0;
 		}
 	}
+	
+	public void draw() {
+		for (int i = 0; i < players.size(); i++) {
+			//drawscore von den playern
+			players.get(i).draw();
+		}
+	}
 }

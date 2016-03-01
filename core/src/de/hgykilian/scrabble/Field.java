@@ -125,7 +125,7 @@ public class Field {
 			if (x == 0 && y == 0) {
 				shapeRenderer.setColor(Color.WHITE);
 			} else {
-				shapeRenderer.setColor(Color.FOREST);
+				shapeRenderer.setColor(31f/255, 157f/255, 60f/255, 1);
 			}
 		}
 		Vector2 pos = board.getFieldPos(x, y, Board.PositionType.BOTTOM_LEFT);
