@@ -46,7 +46,7 @@ public class ScrabbleMain extends ApplicationAdapter {
 
         shapeRenderer.begin(ShapeType.Filled);
         shapeRenderer.setColor(0, 0, 0, 1);
-    	shapeRenderer.rect(34, 34, 482, 482);
+        game.board.drawBackground(shapeRenderer);
 		for (Field[] row : game.board.fields) {
 			for (Field field : row) {
 				field.draw(shapeRenderer);

@@ -28,7 +28,7 @@ public class Word {
 			break;
 		}
 		for (int i = 0; i < word.length(); i++) {
-			Field f = new Field(startX + dX * i, startY + dY * i);
+			Field f = new Field(startX + dX * i, startY + dY * i, null);
 			f.currentChar = new Character(word.charAt(i));
 			fields[i] = f;
 		}

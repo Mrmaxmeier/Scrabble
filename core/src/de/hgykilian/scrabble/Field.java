@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Vector2;
 
 public class Field {
 	/*
@@ -22,14 +23,14 @@ public class Field {
 
 	Character currentChar;
 	public Player player;
+	Board board;
 	int x;
 	int y;
-	static int fieldSize = 30;
-	static int gap = 2;
 	
-	public Field(int x, int y) {
+	public Field(int x, int y, Board board) {
 		this.x = x;
 		this.y = y;
+		this.board = board;
 	}
 	
 	Bonus getBonus() {
@@ -105,14 +106,6 @@ public class Field {
 			return score;
 		}
 	}
-	
-	public int getCoordX() {
-		return 36 + (x+7) * (fieldSize+gap);
-	}
-	
-	public int getCoordY() {
-		return 36 + (-y+7) * (fieldSize+gap);
-	}
 
 	public void draw(ShapeRenderer shapeRenderer) {
 		switch (getBonus()) {
@@ -135,19 +128,21 @@ public class Field {
 				shapeRenderer.setColor(Color.FOREST);
 			}
 		}
-        shapeRenderer.rect(getCoordX(), getCoordY(), fieldSize, fieldSize);
+		Vector2 pos = board.getFieldPos(x, y, Board.PositionType.BOTTOM_LEFT);
+        shapeRenderer.rect(pos.x, pos.y, board.fieldSize, board.fieldSize);
 	}
 	
 	public void drawText(SpriteBatch batch, BitmapFont font) {
         if (hasChar()) {
-        	font.draw(batch, currentChar.toString(), getCoordX() + fieldSize/3, getCoordY()+fieldSize*0.7f);
+        	Vector2 pos = board.getFieldPos(x, y, Board.PositionType.FIELD_CHAR);
+        	font.draw(batch, currentChar.toString(),pos.x, pos.y);
+        	Vector2 scorePos = board.getFieldPos(x, y, Board.PositionType.FIELD_SCORE);
         	if (getLetterScore() != 10){
         		font.getData().setScale(0.75f);
-            	font.draw(batch, String.valueOf(getLetterScore()), getCoordX() + fieldSize*2/3, getCoordY()+fieldSize*0.4f);
         	} else {
         		font.getData().setScale(0.65f, 0.75f);
-            	font.draw(batch, String.valueOf(getLetterScore()), getCoordX() + fieldSize*2/3, getCoordY()+fieldSize*0.4f);
         	}
+        	font.draw(batch, String.valueOf(getLetterScore()), scorePos.x, scorePos.y);
         	font.getData().setScale(1);
         	
         }
