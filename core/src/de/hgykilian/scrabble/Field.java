@@ -79,7 +79,7 @@ public class Field {
 		return this.currentChar != null;
 	}
 
-	public int getLetterScore() {
+	public int getLetterScore(boolean bonus) {
 		int score = 1;
 		if ("ENSIRTUAD".indexOf(currentChar.charValue()) != -1) {
 			score = 1;
@@ -97,6 +97,10 @@ public class Field {
 			score = 10;
 		}
 
+		if (!bonus) {
+			return score;
+		}
+
 		switch (getBonus()) {
 		case DOUBLE_LETTER:
 			return score * 2;
@@ -104,7 +108,7 @@ public class Field {
 			return score * 2;
 		default:
 			return score;
-		}
+		}	
 	}
 
 	public void draw(ShapeRenderer shapeRenderer) {
@@ -137,12 +141,12 @@ public class Field {
         	Vector2 pos = board.getFieldPos(x, y, Board.PositionType.FIELD_CHAR);
         	font.draw(batch, currentChar.toString(),pos.x, pos.y);
         	Vector2 scorePos = board.getFieldPos(x, y, Board.PositionType.FIELD_SCORE);
-        	if (getLetterScore() != 10){
+        	if (getLetterScore(false) != 10){
         		font.getData().setScale(0.75f);
         	} else {
         		font.getData().setScale(0.65f, 0.75f);
         	}
-        	font.draw(batch, String.valueOf(getLetterScore()), scorePos.x, scorePos.y);
+        	font.draw(batch, String.valueOf(getLetterScore(false)), scorePos.x, scorePos.y);
         	font.getData().setScale(1);
         	
         }

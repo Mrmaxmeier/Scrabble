@@ -39,7 +39,7 @@ public class Word {
 		Field[] fields = getFields();
 		int score = 0;
 		for (Field field : fields) {
-			score += field.getLetterScore();
+			score += field.getLetterScore(true);
 		}
 		for (Field field : fields) {
 			switch (field.getBonus()) {
