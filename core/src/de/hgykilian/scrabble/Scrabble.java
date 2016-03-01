@@ -6,9 +6,11 @@ public class Scrabble {
 	Board board;
 	List<Player> players = new ArrayList<Player>();
 	Queue<Character> charPool = new LinkedList<Character>();
+	int currentPlayer;
 	
 	public Scrabble() {
 		board = new Board();
+		currentPlayer = 0;
 		
 		fcp('E', 15);
 		fcp('N', 9);
@@ -34,12 +36,12 @@ public class Scrabble {
 		fcp('K', 2);
 		fcp('P', 1);
 		
-		fcp('Ä', 1);
+		fcp('ï¿½', 1);
 		fcp('J', 1);
-		fcp('Ü', 1);
+		fcp('ï¿½', 1);
 		fcp('V', 1);
 		
-		fcp('Ö', 1);
+		fcp('ï¿½', 1);
 		fcp('X', 1);
 		fcp('Q', 1);
 		fcp('Y', 1);
@@ -64,5 +66,13 @@ public class Scrabble {
 			p.chars.add(popChar());
 		}
 		players.add(p);
+	}
+	
+	public void nextPlayer(){
+		if (currentPlayer < players.size()-1) {
+			currentPlayer++;
+		} else {
+			currentPlayer = 0;
+		}
 	}
 }

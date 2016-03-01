@@ -7,4 +7,8 @@ public class Player {
 	Word[] words;
 	List<Character> chars = new ArrayList<Character>();
 	int score;
+	
+	public void draw(){
+		
+	}
 }

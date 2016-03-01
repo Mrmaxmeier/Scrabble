@@ -61,6 +61,8 @@ public class ScrabbleMain extends ApplicationAdapter {
 			}
 		}
         game.board.drawRand(batch, font);
+        
+        game.players.get(game.currentPlayer).draw();
 		batch.end();
 	}
 }
