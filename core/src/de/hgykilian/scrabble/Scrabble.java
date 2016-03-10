@@ -2,6 +2,9 @@ package de.hgykilian.scrabble;
 
 import java.util.*;
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 public class Scrabble {
 	Board board;
 	List<Player> players = new ArrayList<Player>();
@@ -36,12 +39,12 @@ public class Scrabble {
 		fcp('K', 2);
 		fcp('P', 1);
 		
-		fcp('�', 1);
+		fcp('Ü', 1);
 		fcp('J', 1);
-		fcp('�', 1);
+		fcp('Ö', 1);
 		fcp('V', 1);
 		
-		fcp('�', 1);
+		fcp('Ä', 1);
 		fcp('X', 1);
 		fcp('Q', 1);
 		fcp('Y', 1);
@@ -76,7 +79,7 @@ public class Scrabble {
 		}
 	}
 	
-	public void draw() {
+	public void draw(BitmapFont font, SpriteBatch batch) {
 		for (int i = 0; i < players.size(); i++) {
 			//drawscore von den playern
 			players.get(i).draw();
