@@ -10,6 +10,7 @@ public class Scrabble {
 	List<Player> players = new ArrayList<Player>();
 	Queue<Character> charPool = new LinkedList<Character>();
 	int currentPlayer;
+	int consecutivePasses = 0;
 	
 	public Scrabble() {
 		board = new Board();
@@ -72,6 +73,14 @@ public class Scrabble {
 	}
 	
 	public void nextPlayer(){
+		boolean noChars = charPool.isEmpty() && players.get(currentPlayer).chars.size() == 0;
+		boolean passed = consecutivePasses >= players.size()*2;
+		
+		if (noChars || passed) {
+			endGame();
+			return;
+		}
+		players.get(currentPlayer).end(this);
 		if (currentPlayer < players.size()-1) {
 			currentPlayer++;
 		} else {
@@ -81,8 +90,12 @@ public class Scrabble {
 	
 	public void draw(BitmapFont font, SpriteBatch batch) {
 		for (int i = 0; i < players.size(); i++) {
-			//drawscore von den playern
+			//draw score von den playern
 			players.get(i).draw();
 		}
+	}
+	
+	public void endGame(){
+		
 	}
 }
