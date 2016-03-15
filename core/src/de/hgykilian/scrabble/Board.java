@@ -1,20 +1,24 @@
 package de.hgykilian.scrabble;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class Board {
 	int size = 15;
 	Field[][] fields;
 	Word[] words;
+	Viewport viewport;
 	
 
 	int fieldSize = 30;
 	int fieldGap = 2;
 	
-	public Board() {
+	public Board(Viewport viewport) {
+		this.viewport = viewport;
 		fields = new Field[size][size];
 		for (int x = 0; x < size; x++) {
 			for (int y = 0; y < size; y++) {
@@ -54,6 +58,10 @@ public class Board {
 	}
 	
 	public Vector2 getFieldPos(int x, int y, PositionType type) {
+		int width = viewport.getScreenWidth();
+		int height = viewport.getScreenHeight();
+		int boardSize = (int) (Math.min(width, height) * 0.8);
+		fieldSize = (boardSize / 15)-fieldGap;
 		switch (type) {
 		case TOP_LEFT:
 			y++;
@@ -66,8 +74,8 @@ public class Board {
 		default:
 			break;
 		}
-		int xP = 120 + 36 + (x+7) * (fieldSize+fieldGap);
-		int yP = 25 + 36 + (y+7) * (fieldSize+fieldGap);
+		int xP = (width - boardSize) / 2 + (x+7) * (fieldSize+fieldGap);
+		int yP = (height - boardSize) / 2 + (y+7) * (fieldSize+fieldGap);
 		if (type == PositionType.MIDDLE) {
 			xP += fieldSize/2;
 			yP += fieldSize/2;
