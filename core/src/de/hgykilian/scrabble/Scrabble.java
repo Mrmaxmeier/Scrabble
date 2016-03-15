@@ -2,6 +2,7 @@ package de.hgykilian.scrabble;
 
 import java.util.*;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -60,6 +61,13 @@ public class Scrabble {
 		}
 	}
 	
+	public void addChar(char[] c) {
+		for (char ch : c) {
+			charPool.add(ch);
+		}
+		Collections.shuffle((List<Character>) charPool);
+	}
+	
 	public Character popChar() {
 		System.out.println("Chars left: " + (charPool.size()-1));
 		return charPool.isEmpty() ? null : charPool.remove();
@@ -93,6 +101,21 @@ public class Scrabble {
 			//draw score von den playern
 			players.get(i).draw();
 		}
+	}
+	
+	public void pass() {
+		consecutivePasses++;
+		players.get(currentPlayer).pass(this);
+	}
+	
+	public void replaceChar(char[] c) {
+		if (charPool.size() >= 7) {
+			players.get(currentPlayer).replaceChar(this, c);
+		} else {
+			Gdx.app.log("Scrabble", "Remaining letters < 7 | Replacing not allowed");
+		}
+		
+		nextPlayer();
 	}
 	
 	public void endGame(){
