@@ -1,6 +1,5 @@
 package de.hgykilian.scrabble;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -22,7 +21,7 @@ public class Board {
 		for (int x = 0; x < size; x++) {
 			for (int y = 0; y < size; y++) {
 				fields[x][y] = new Field(x - size/2, y - size/2, this);
-				System.out.printf("%d %d %s\n", x, y, fields[x][y].getBonus());
+				//System.out.printf("%d %d %s\n", x, y, fields[x][y].getBonus());
 			}
 		}
 	}
@@ -56,11 +55,12 @@ public class Board {
 		FIELD_CHAR, FIELD_SCORE
 	}
 	
+	// Mit x und y von -size/2 bis size/2 (-7 und 7)
 	public Vector2 getFieldPos(int x, int y, PositionType type) {
 		int width = viewport.getScreenWidth();
 		int height = viewport.getScreenHeight();
 		int boardSize = (int) (Math.min(width, height) * 0.8);
-		fieldSize = (boardSize / 15)-fieldGap;
+		fieldSize = (boardSize / size)-fieldGap;
 		switch (type) {
 		case TOP_LEFT:
 			y++;
@@ -73,8 +73,8 @@ public class Board {
 		default:
 			break;
 		}
-		int xP = (width - boardSize) / 2 + (x+7) * (fieldSize+fieldGap);
-		int yP = (height - boardSize) / 2 + (y+7) * (fieldSize+fieldGap);
+		int xP = (width - boardSize) / 2 + (x+size/2) * (fieldSize+fieldGap);
+		int yP = (height - boardSize) / 2 + (y+size/2) * (fieldSize+fieldGap);
 		if (type == PositionType.MIDDLE) {
 			xP += fieldSize/2;
 			yP += fieldSize/2;
@@ -87,11 +87,44 @@ public class Board {
 		}
 		return new Vector2(xP, yP);
 	}
+	
+	public boolean hasCharNeighbour(int x, int y) {
+		if ((x > 0 && fields[x-1][y].hasChar()) || (x < size-1 && fields[x+1][y].hasChar())) {
+			return true;
+		}
+		if ((y > 0 && fields[x][y-1].hasChar()) || (y < size-1 && fields[x][y+1].hasChar())) {
+			return true;
+		}
+		return false;
+	}
+	
+	public Vector2 getSnapPoint(Vector2 pos) {
+		float nearestDist = 0;
+		Field nearestField = null;
+		for (int y = 0; y < size; y++) {
+			for (int x = 0; x < size; x++) {
+				if (!hasCharNeighbour(x, y)) {
+					continue;
+				}
+				
+				// Vector2 gibt vec2 zurück, modifiziert aber auch inplace .__.
+				Vector2 fpos = getFieldPos(x-size/2, y-size/2, Board.PositionType.BOTTOM_LEFT);
+				if (nearestDist > fpos.cpy().sub(pos).len2() || nearestField == null) {
+					nearestDist = fpos.sub(pos).len2();
+					nearestField = fields[x][y];
+				}
+			}
+		}
+		if (nearestField == null || nearestDist > fieldSize*fieldSize*2) {
+			return null;
+		}
+		return getFieldPos(nearestField.x, nearestField.y, Board.PositionType.BOTTOM_LEFT);
+	}
 
 
 	public void drawBackground(ShapeRenderer shapeRenderer) {
-		Vector2 from = getFieldPos(-7, -7, PositionType.BOTTOM_LEFT);
-		int width = (fieldSize + fieldGap) * 15 + fieldGap;
+		Vector2 from = getFieldPos(-size/2, -size/2, PositionType.BOTTOM_LEFT);
+		int width = (fieldSize + fieldGap) * size + fieldGap;
     	shapeRenderer.rect(from.x - fieldGap, from.y - fieldGap, width, width);
 	}
 }

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class ScrabbleMain extends ApplicationAdapter {
@@ -15,6 +16,7 @@ public class ScrabbleMain extends ApplicationAdapter {
 	Scrabble game = new Scrabble();
 	BitmapFont font;
 	ScreenViewport viewport;
+	Stage stage;
 	
 	@Override
 	public void create () {
@@ -22,10 +24,12 @@ public class ScrabbleMain extends ApplicationAdapter {
 		shapeRenderer = new ShapeRenderer();
 		font = new BitmapFont();
 		viewport = new ScreenViewport();
+	    stage = new Stage(viewport, batch);
 		game.board.viewport = viewport;
-		
-		
-		game.addPlayer(new Player());
+	
+	    Gdx.input.setInputProcessor(stage);
+	    
+		game.addPlayer(new Player(Player.Position.LEFT, game.board, stage));
 		
 		int i = 0;
 		for (Field[] row : game.board.fields) {
@@ -64,9 +68,10 @@ public class ScrabbleMain extends ApplicationAdapter {
 			}
 		}
         game.board.drawRand(batch, font);
-        
         game.draw(font, batch);
 		batch.end();
+		stage.act();
+        stage.draw();
 	}
 	
 	@Override

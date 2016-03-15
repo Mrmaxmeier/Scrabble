@@ -3,17 +3,31 @@ package de.hgykilian.scrabble;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.scenes.scene2d.Stage;
+
 public class Player {
 	ArrayList<Word> words = new ArrayList<Word>();
 	List<Character> chars = new ArrayList<Character>();
 	int score;
 	boolean firstPass;
 	boolean secondPass;
+	Board board;
+	CharActor ca;
+	Stage stage;
+	public enum Position {
+		LEFT, RIGHT
+	}
+	Position position;
 	
-	public Player(){
+	public Player(Position position, Board board, Stage stage){
+		this.board = board;
+		this.stage = stage;
+		this.position = position;
 		score = 0;
 		firstPass = false;
 		secondPass = false;
+		ca = new CharActor('H', board);
+		this.stage.addActor(ca);
 	}
 	
 	public void start(){
@@ -21,7 +35,8 @@ public class Player {
 	}
 	
 	public void draw(){
-		
+		for (int i = 0; i < chars.size(); i++) {
+		}
 	}
 	
 	public void end(Scrabble sc){

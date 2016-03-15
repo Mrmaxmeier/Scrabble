@@ -61,7 +61,9 @@ public class Scrabble {
 	}
 	
 	public Character popChar() {
-		System.out.println("Chars left: " + (charPool.size()-1));
+		if (charPool.size() < 20) {
+			System.out.println("Chars left: " + (charPool.size()-1));
+		}
 		return charPool.isEmpty() ? null : charPool.remove();
 	}
 	
