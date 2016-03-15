@@ -17,8 +17,7 @@ public class Board {
 	int fieldSize = 30;
 	int fieldGap = 2;
 	
-	public Board(Viewport viewport) {
-		this.viewport = viewport;
+	public Board() {
 		fields = new Field[size][size];
 		for (int x = 0; x < size; x++) {
 			for (int y = 0; y < size; y++) {

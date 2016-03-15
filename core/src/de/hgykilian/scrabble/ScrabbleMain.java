@@ -2,26 +2,27 @@ package de.hgykilian.scrabble;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class ScrabbleMain extends ApplicationAdapter {
 	SpriteBatch batch;
 	ShapeRenderer shapeRenderer;
 	Scrabble game = new Scrabble();
 	BitmapFont font;
+	ScreenViewport viewport;
 	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		shapeRenderer = new ShapeRenderer();
 		font = new BitmapFont();
-		font.setColor(Color.BLUE);
+		viewport = new ScreenViewport();
+		game.board.viewport = viewport;
 		
 		
 		game.addPlayer(new Player());
@@ -39,8 +40,10 @@ public class ScrabbleMain extends ApplicationAdapter {
 
 	@Override
 	public void render () {
+		viewport.apply();
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		batch.setProjectionMatrix(viewport.getCamera().combined);
         shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
 
 
@@ -64,5 +67,10 @@ public class ScrabbleMain extends ApplicationAdapter {
         
         game.draw(font, batch);
 		batch.end();
+	}
+	
+	@Override
+	public void resize(int width, int height) {
+		viewport.update(width, height, true);
 	}
 }

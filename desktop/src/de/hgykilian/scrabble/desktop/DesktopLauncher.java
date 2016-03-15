@@ -11,6 +11,8 @@ public class DesktopLauncher {
 		config.title = "Scrabble";
 		config.width= 800;
 		config.height = 600;
+		config.useHDPI = true;
+		config.vSyncEnabled = true;
 		new LwjglApplication(new ScrabbleMain(), config);
 	}
 }
