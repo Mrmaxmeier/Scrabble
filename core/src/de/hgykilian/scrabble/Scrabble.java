@@ -68,9 +68,7 @@ public class Scrabble {
 	}
 	
 	public void addPlayer(Player p) {
-		for (int i = 0; i < 7; i++) {
-			p.chars.add(popChar());
-		}
+		p.fillChars(this);
 		players.add(p);
 	}
 	

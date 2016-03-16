@@ -7,12 +7,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class Player {
 	ArrayList<Word> words = new ArrayList<Word>();
-	List<Character> chars = new ArrayList<Character>();
+	List<CharActor> chars = new ArrayList<>();
 	int score;
 	boolean firstPass;
 	boolean secondPass;
 	Board board;
-	CharActor ca;
 	Stage stage;
 	public enum Position {
 		LEFT, RIGHT
@@ -26,22 +25,38 @@ public class Player {
 		score = 0;
 		firstPass = false;
 		secondPass = false;
-		ca = new CharActor('H', board);
-		this.stage.addActor(ca);
 	}
 	
-	public void start(){
+	public void start() {
 		
 	}
 	
-	public void draw(){
-		for (int i = 0; i < chars.size(); i++) {
-		}
+	public void draw() {
 	}
 	
 	public void end(Scrabble sc){
+		fillChars(sc);
+	}
+	
+	public void fillChars(Scrabble game) {
 		for(int i = chars.size()-1; i <= 7; i++){
-			chars.add(sc.popChar());
+			CharActor ca = new CharActor(game.popChar(), this);
+			chars.add(ca);
+			this.stage.addActor(ca);
 		}
+		updateChars();
+	}
+	
+	public void updateChars() {
+		for (int i = 0; i < chars.size(); i++) {
+			chars.get(i).index = i;	
+			chars.get(i).resetPos();
+		}
+	}
+
+	public void delChar(CharActor actor) {
+		chars.remove(actor);
+		actor.remove();
+		updateChars();
 	}
 }

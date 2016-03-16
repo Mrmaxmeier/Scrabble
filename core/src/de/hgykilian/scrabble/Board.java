@@ -98,12 +98,12 @@ public class Board {
 		return false;
 	}
 	
-	public Vector2 getSnapPoint(Vector2 pos) {
+	public Field getSnapField(Vector2 pos) {
 		float nearestDist = 0;
 		Field nearestField = null;
 		for (int y = 0; y < size; y++) {
 			for (int x = 0; x < size; x++) {
-				if (!hasCharNeighbour(x, y)) {
+				if (!hasCharNeighbour(x, y) || fields[x][y].hasChar()) {
 					continue;
 				}
 				
@@ -118,7 +118,15 @@ public class Board {
 		if (nearestField == null || nearestDist > fieldSize*fieldSize*2) {
 			return null;
 		}
-		return getFieldPos(nearestField.x, nearestField.y, Board.PositionType.BOTTOM_LEFT);
+		return nearestField;
+	}
+	
+	public Vector2 getSnapPoint(Vector2 pos) {
+		Field f = getSnapField(pos);
+		if (f != null) {
+			return getFieldPos(f.x, f.y, Board.PositionType.BOTTOM_LEFT);
+		}
+		return null;
 	}
 
 

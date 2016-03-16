@@ -15,11 +15,14 @@ public class CharActor extends Actor {
     char c;
     ShapeRenderer renderer = new ShapeRenderer();
     Board board;
+    Player player;
+    int index;
 
-    public CharActor (char c, final Board board) {
-        this.board = board;
+    public CharActor (final char c, final Player player) {
+        this.board = player.board;
+        this.player = player;
         region = new TextureRegion();
-        final Actor actor = this;
+        final CharActor actor = this;
         this.addListener(new DragListener() {
             public void drag(InputEvent event, float x, float y, int pointer) {
             	actor.moveBy(x - actor.getWidth() / 2, y - actor.getHeight() / 2);
@@ -31,13 +34,24 @@ public class CharActor extends Actor {
             }
             
             public void dragStart(InputEvent event, float x, float y, int pointer)  {
-            	actor.debug();
+            	//actor.debug();
             }
             
             public void dragStop(InputEvent event, float x, float y, int pointer)  {
-            	actor.setPosition(0,  0);
+            	Field snapField = board.getSnapField(new Vector2(getX(), getY()));
+            	if (snapField != null) {
+            		snapField.currentChar = c;
+            		board.fields[snapField.x+board.size/2][snapField.y+board.size/2] = snapField;
+                	player.delChar(actor);
+            	}
+            	actor.resetPos();
             }
         });
+        this.resetPos();
+    }
+    
+    public void resetPos() {
+    	setPosition(0, index * (board.fieldSize + board.fieldGap));
     }
 
     @Override
@@ -46,6 +60,7 @@ public class CharActor extends Actor {
             setWidth(board.fieldSize);
             setHeight(board.fieldSize);
             setBounds(0, 0, getWidth(), getHeight());
+            resetPos();
     	}
         batch.end();
         renderer.setProjectionMatrix(batch.getProjectionMatrix());
