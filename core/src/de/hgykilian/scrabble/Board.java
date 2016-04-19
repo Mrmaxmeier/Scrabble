@@ -88,6 +88,15 @@ public class Board {
 		return new Vector2(xP, yP);
 	}
 	
+	public Vector2 getSidebarPos(int index, int total, Player.Position playerPos) {
+		int yP = viewport.getScreenHeight()/2 + (total/2 - index) * (fieldSize + fieldGap);
+		int xP = 0;
+		if (playerPos == Player.Position.RIGHT) {
+			xP = viewport.getScreenWidth() - fieldSize;
+		}
+		return new Vector2(xP, yP);
+	}
+	
 	public boolean hasCharNeighbour(int x, int y) {
 		if ((x > 0 && fields[x-1][y].hasChar()) || (x < size-1 && fields[x+1][y].hasChar())) {
 			return true;

@@ -38,20 +38,26 @@ public class CharActor extends Actor {
             }
             
             public void dragStop(InputEvent event, float x, float y, int pointer)  {
-            	Field snapField = board.getSnapField(new Vector2(getX(), getY()));
-            	if (snapField != null) {
-            		snapField.currentChar = c;
-            		board.fields[snapField.x+board.size/2][snapField.y+board.size/2] = snapField;
-                	player.delChar(actor);
-            	}
-            	actor.resetPos();
+            	actor.place();
             }
         });
         this.resetPos();
     }
     
     public void resetPos() {
-    	setPosition(0, index * (board.fieldSize + board.fieldGap));
+    	Vector2 pos = board.getSidebarPos(index,player.chars.size(), player.position);
+    	setPosition(pos.x, pos.y);
+    }
+    
+    public void place() {
+    	Field snapField = board.getSnapField(new Vector2(getX(), getY()));
+    	if (snapField != null) {
+    		snapField.currentChar = c;
+    		snapField.player = player;
+    		board.fields[snapField.x+board.size/2][snapField.y+board.size/2] = snapField;
+        	player.delChar(this);
+    	}
+    	resetPos();
     }
 
     @Override
@@ -71,7 +77,7 @@ public class CharActor extends Actor {
         renderer.setColor(Color.BLUE);
         renderer.rect(0, 0, getWidth(), getHeight());
         renderer.end();
-
+    	
         batch.begin();
     }
 }

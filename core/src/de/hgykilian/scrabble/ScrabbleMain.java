@@ -30,6 +30,7 @@ public class ScrabbleMain extends ApplicationAdapter {
 	    Gdx.input.setInputProcessor(stage);
 	    
 		game.addPlayer(new Player(Player.Position.LEFT, game.board, stage));
+		game.addPlayer(new Player(Player.Position.RIGHT, game.board, stage));
 		
 		int i = 0;
 		for (Field[] row : game.board.fields) {
