@@ -45,7 +45,7 @@ public class CharActor extends Actor {
     }
     
     public void resetPos() {
-    	Vector2 pos = board.getSidebarPos(index,player.chars.size(), player.position);
+    	Vector2 pos = board.getSidebarPos(index, player.chars.size(), player.position);
     	setPosition(pos.x, pos.y);
     }
     

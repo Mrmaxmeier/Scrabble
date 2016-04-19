@@ -35,6 +35,7 @@ public class Word {
 		return fields;
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	public int getScore() {
 		Field[] fields = getFields();
 		int score = 0;
