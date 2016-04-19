@@ -35,7 +35,7 @@ public class ScrabbleMain extends ApplicationAdapter {
 		int i = 0;
 		for (Field[] row : game.board.fields) {
 			for (Field field : row) {
-				if (i % 4 == 0) {
+				if (i % 8 == 0) {
 					field.currentChar = game.popChar();
 				}
 				i++;

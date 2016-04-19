@@ -10,7 +10,7 @@ TODOs:
   - [ ] Lan-Multiplayer
   - [ ] Statistik (DB)
 - [ ] Organisatorisches
-  - [ ] 1. Meilenstein `12. 2`
-  - [ ] 2. Meilenstein `8. 4`
+  - [x] 1. Meilenstein `12. 2`
+  - [x] 2. Meilenstein `8. 4`
   - [ ] 3. Meilenstein `TBD`
   - [ ] UMLs generieren

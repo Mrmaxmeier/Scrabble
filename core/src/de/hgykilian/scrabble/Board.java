@@ -126,24 +126,49 @@ public class Board {
 	public Field getSnapField(Vector2 pos) {
 		float nearestDist = 0;
 		Field nearestField = null;
+		float nearestUsableDist = 0;
+		Field nearestUsableField = null;
 		for (int y = 0; y < size; y++) {
 			for (int x = 0; x < size; x++) {
-				if (!hasCharNeighbour(x, y) || fields[x][y].hasChar()) {
-					continue;
-				}
-				
 				// Vector2 gibt vec2 zurück, modifiziert aber auch inplace .__.
 				Vector2 fpos = getFieldPos(x-size/2, y-size/2, Board.PositionType.BOTTOM_LEFT);
 				if (nearestDist > fpos.cpy().sub(pos).len2() || nearestField == null) {
 					nearestDist = fpos.sub(pos).len2();
 					nearestField = fields[x][y];
 				}
+				if (!hasCharNeighbour(x, y) || fields[x][y].hasChar()) {
+					continue;
+				}
+				
+				if (nearestUsableDist > fpos.cpy().sub(pos).len2() || nearestUsableField == null) {
+					nearestUsableDist = fpos.sub(pos).len2();
+					nearestUsableField = fields[x][y];
+				}
 			}
 		}
-		if (nearestField == null || nearestDist > fieldSize*fieldSize*2) {
+		
+		
+		if (nearestField.currentChar == null) {
+			int index_x = nearestField.x + size/2;
+			int index_y = nearestField.y + size/2;
+			for (int i = 0; i < (size - index_x); i++) {
+				if (fields[index_x + i][index_y].hasChar()) {
+					return nearestField;
+				}
+			}
+		
+			for (int i = 0; i < index_y; i++) {
+				if (fields[index_x][index_y - i].hasChar()) {
+					return nearestField;
+				}
+			}
+		}
+		
+		if (nearestUsableField == null || nearestUsableDist > fieldSize*fieldSize*2) {
 			return null;
 		}
-		return nearestField;
+		
+		return nearestUsableField;
 	}
 	
 	public Vector2 getSnapPoint(Vector2 pos) {

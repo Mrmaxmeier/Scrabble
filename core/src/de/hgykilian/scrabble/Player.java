@@ -14,6 +14,7 @@ public class Player {
 	boolean secondPass;
 	Board board;
 	Stage stage;
+	ArrayList<Field> currentWord = new ArrayList<>();
 	public enum Position {
 		LEFT, RIGHT
 	}
@@ -47,10 +48,13 @@ public class Player {
 	}
 	
 	public void fillChars(Scrabble game) {
-		for(int i = chars.size()-1; i <= 7; i++){
-			CharActor ca = new CharActor(game.popChar(), this);
-			chars.add(ca);
-			this.stage.addActor(ca);
+		if (chars.size() < 7) {
+			for(int i = chars.size()-1; i <= 7; i++){
+				CharActor ca = new CharActor(game.popChar(), this);
+				chars.add(ca);
+				this.stage.addActor(ca);
+			}
+		updateChars();
 		}
 		pass = false;
 	}
@@ -60,7 +64,6 @@ public class Player {
 			chars.remove(ch);
 		}
 		fillChars(sc);
-		
 		updateChars();
 	}
 	
