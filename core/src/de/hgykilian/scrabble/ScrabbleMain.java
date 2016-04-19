@@ -2,29 +2,34 @@ package de.hgykilian.scrabble;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class ScrabbleMain extends ApplicationAdapter {
 	SpriteBatch batch;
 	ShapeRenderer shapeRenderer;
 	Scrabble game = new Scrabble();
 	BitmapFont font;
+	ScreenViewport viewport;
+	Stage stage;
 	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		shapeRenderer = new ShapeRenderer();
 		font = new BitmapFont();
-		font.setColor(Color.BLUE);
-		
-		
-		game.addPlayer(new Player());
+		viewport = new ScreenViewport();
+	    stage = new Stage(viewport, batch);
+		game.board.viewport = viewport;
+	
+	    Gdx.input.setInputProcessor(stage);
+	    
+		game.addPlayer(new Player(Player.Position.LEFT, game.board, stage));
 		
 		int i = 0;
 		for (Field[] row : game.board.fields) {
@@ -39,8 +44,10 @@ public class ScrabbleMain extends ApplicationAdapter {
 
 	@Override
 	public void render () {
+		viewport.apply();
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		batch.setProjectionMatrix(viewport.getCamera().combined);
         shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
 
 
@@ -61,8 +68,14 @@ public class ScrabbleMain extends ApplicationAdapter {
 			}
 		}
         game.board.drawRand(batch, font);
-        
         game.draw(font, batch);
 		batch.end();
+		stage.act();
+        stage.draw();
+	}
+	
+	@Override
+	public void resize(int width, int height) {
+		viewport.update(width, height, true);
 	}
 }

@@ -69,14 +69,14 @@ public class Scrabble {
 	}
 	
 	public Character popChar() {
-		System.out.println("Chars left: " + (charPool.size()-1));
+		if (charPool.size() < 20) {
+			System.out.println("Chars left: " + (charPool.size()-1));
+		}
 		return charPool.isEmpty() ? null : charPool.remove();
 	}
 	
 	public void addPlayer(Player p) {
-		for (int i = 0; i < 7; i++) {
-			p.chars.add(popChar());
-		}
+		p.fillChars(this);
 		players.add(p);
 	}
 	
@@ -108,7 +108,7 @@ public class Scrabble {
 		players.get(currentPlayer).pass(this);
 	}
 	
-	public void replaceChar(char[] c) {
+	public void replaceChar(CharActor[] c) {
 		if (charPool.size() >= 7) {
 			players.get(currentPlayer).replaceChar(this, c);
 		} else {

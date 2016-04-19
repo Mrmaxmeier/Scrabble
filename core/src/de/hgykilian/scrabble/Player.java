@@ -3,23 +3,35 @@ package de.hgykilian.scrabble;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.scenes.scene2d.Stage;
+
 public class Player {
 	ArrayList<Word> words = new ArrayList<Word>();
-	List<Character> chars = new ArrayList<Character>();
+	List<CharActor> chars = new ArrayList<>();
 	int score;
 	boolean pass;
+	boolean firstPass;
+	boolean secondPass;
+	Board board;
+	Stage stage;
+	public enum Position {
+		LEFT, RIGHT
+	}
+	Position position;
 	
-	public Player(){
+	public Player(Position position, Board board, Stage stage){
+		this.board = board;
+		this.stage = stage;
+		this.position = position;
 		score = 0;
 		pass = false;
 	}
 	
-	public void start(){
+	public void start() {
 		
 	}
 	
-	public void draw(){
-		
+	public void draw() {
 	}
 	
 	public void pass(Scrabble sc) {
@@ -31,18 +43,37 @@ public class Player {
 		if (pass = false) {
 			sc.consecutivePasses = 0;
 		}
+		fillChars(sc);
+	}
+	
+	public void fillChars(Scrabble game) {
 		for(int i = chars.size()-1; i <= 7; i++){
-			chars.add(sc.popChar());
+			CharActor ca = new CharActor(game.popChar(), this);
+			chars.add(ca);
+			this.stage.addActor(ca);
 		}
 		pass = false;
 	}
 
-	public void replaceChar(Scrabble sc, char[] c) {
-		for (char ch : c) {
+	public void replaceChar(Scrabble sc, CharActor[] c) {
+		for (CharActor ch : c) {
 			chars.remove(ch);
 		}
-		chars.add(sc.popChar());
-		sc.addChar(c);
+		fillChars(sc);
 		
+		updateChars();
+	}
+	
+	public void updateChars() {
+		for (int i = 0; i < chars.size(); i++) {
+			chars.get(i).index = i;	
+			chars.get(i).resetPos();
+		}
+	}
+
+	public void delChar(CharActor actor) {
+		chars.remove(actor);
+		actor.remove();
+		updateChars();
 	}
 }
