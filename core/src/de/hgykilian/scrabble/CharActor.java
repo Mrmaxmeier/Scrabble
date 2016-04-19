@@ -2,6 +2,7 @@ package de.hgykilian.scrabble;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -17,10 +18,15 @@ public class CharActor extends Actor {
     Board board;
     Player player;
     int index;
+    static BitmapFont font;
 
     public CharActor (final char c, final Player player) {
+    	if (font == null) {
+    		font = new BitmapFont();
+    	}
         this.board = player.board;
         this.player = player;
+        this.c = c;
         region = new TextureRegion();
         final CharActor actor = this;
         this.addListener(new DragListener() {
@@ -79,5 +85,20 @@ public class CharActor extends Actor {
         renderer.end();
     	
         batch.begin();
+        
+       	//Vector2 pos = board.getSidebarPos((int)getX(), (int)getY(), player.position);
+        Vector2 pos = new Vector2(getX(), getY());
+       	pos = board.getSidebarTextPos(pos, Board.PositionType.FIELD_CHAR);
+       	font.draw(batch, String.valueOf(c),pos.x, pos.y);
+       	Vector2 scorePos = board.getFieldPos((int)getX(), (int)getY(), Board.PositionType.FIELD_SCORE);
+       	if (CharacterInfo.getLetterScore(new Character(c)) != 10){
+       		font.getData().setScale(0.75f);
+       	} else {
+       		font.getData().setScale(0.65f, 0.75f);
+       	}
+       	font.draw(batch, String.valueOf(CharacterInfo.getLetterScore(new Character(c))), scorePos.x, scorePos.y);
+       	font.getData().setScale(1);
+        	
+        }
     }
-}
+

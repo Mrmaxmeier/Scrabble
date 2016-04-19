@@ -88,6 +88,22 @@ public class Board {
 		return new Vector2(xP, yP);
 	}
 	
+	public Vector2 getSidebarTextPos(Vector2 pos, PositionType type) {
+		int xP = (int) pos.x;
+		int yP = (int) pos.y;
+		if (type == PositionType.MIDDLE) {
+			xP += fieldSize/2;
+			yP += fieldSize/2;
+		} else if (type == PositionType.FIELD_SCORE) {
+			xP += fieldSize*2/3;
+			yP += fieldSize*0.4f;
+		} else if (type == PositionType.FIELD_CHAR) {
+			xP += fieldSize/3;
+			yP += fieldSize*0.7f;
+		}
+		return new Vector2(xP, yP);
+	}
+	
 	public Vector2 getSidebarPos(int index, int total, Player.Position playerPos) {
 		int yP = viewport.getScreenHeight()/2 + (total/2 - index) * (fieldSize + fieldGap);
 		int xP = 0;
