@@ -147,6 +147,10 @@ public class Board {
 			}
 		}
 		
+		if (nearestDist > fieldSize * fieldSize / 2) {
+			return null;
+		}
+		
 		
 		if (nearestField.currentChar == null) {
 			int index_x = nearestField.x + size/2;
@@ -164,7 +168,7 @@ public class Board {
 			}
 		}
 		
-		if (nearestUsableField == null || nearestUsableDist > fieldSize*fieldSize*2) {
+		if (nearestUsableField == null || nearestUsableDist > fieldSize) {
 			return null;
 		}
 		
