@@ -4,28 +4,30 @@ public class Word {
 	enum Direction {
 		UP(0, 1), RIGHT(1, 0), DOWN(0, -1), LEFT(-1, 0);
 		final int x;
-	    final int y;
-	    Direction(int mass, int radius) {
-	        this.x = mass;
-	        this.y = radius;
-	    }
-	    
-	    static Direction fromXY(int x, int y) {
-	    	Direction[] directions = {UP, RIGHT, DOWN, LEFT};
-	    	for (Direction d : directions) {
+		final int y;
+
+		Direction(int mass, int radius) {
+			this.x = mass;
+			this.y = radius;
+		}
+
+		static Direction fromXY(int x, int y) {
+			Direction[] directions = { UP, RIGHT, DOWN, LEFT };
+			for (Direction d : directions) {
 				if (d.x == x && d.y == y) {
 					return d;
 				}
 			}
 			return null;
-	    }
+		}
 	}
+
 	String word;
 	int startX;
 	int startY;
 	Direction direction;
 	private Board board;
-	
+
 	Word(Field field, Board board) {
 		startX = field.x;
 		startY = field.y;
@@ -60,38 +62,32 @@ public class Word {
 		}
 		return score;
 	}
-	
+
 	public void checkNextOnBoard() {
 		while (true) {
-			int xIndex = startX + (word.length() + 1) * direction.x + board.size/2;
-			int yIndex = startY + (word.length() + 1) * direction.y + board.size/2;
-			if (xIndex < 0 || yIndex < 0 || xIndex > board.size || yIndex > board.size) {
+			Field f = board.getField(startX + (word.length() + 1) * direction.x, startY + (word.length() + 1) * direction.y);
+			if (f == null || !f.hasChar()) {
 				return;
 			}
-			Field f = board.fields[xIndex][yIndex];
-			if (f.hasChar()) {
-				word += f.currentChar;
-			} else {
-				return;
-			}
+			word += f.currentChar.toString();
 		}
 	}
 
-	public boolean add(Field field) {
+	public boolean add(Field field, char character) {
 		if (direction == null) {
-			direction = Direction.fromXY(startX - field.x, startY - field.y);
+			direction = Direction.fromXY(field.x - startX, field.y - startY);
 			if (direction == null) {
 				return false;
 			}
 		} else {
-			int nextX = startX + (word.length() + 1) * direction.x;
-			int nextY = startY + (word.length() + 1) * direction.y;
+			int nextX = startX + word.length() * direction.x;
+			int nextY = startY + word.length() * direction.y;
 			if (field.x != nextX || field.y != nextY) {
 				return false;
-			}	
+			}
 		}
 
-		word += field.currentChar;
+		word += character;
 		checkNextOnBoard();
 		return true;
 	}

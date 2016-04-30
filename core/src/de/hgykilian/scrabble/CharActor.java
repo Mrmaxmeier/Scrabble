@@ -65,16 +65,17 @@ public class CharActor extends Actor {
     public void place() {
     	Field snapField = board.getSnapField(new Vector2(getX(), getY()));
     	if (snapField != null) {
-    		snapField.currentChar = c;
-    		snapField.player = player;
     		if (player.currentWord == null) {
-        		player.currentWord = new Word(snapField);	
+        		snapField.currentChar = c;
+        		player.currentWord = new Word(snapField, board);	
     		} else {
-    			if (!player.currentWord.add(snapField)) {
+    			if (!player.currentWord.add(snapField, c)) {
     				resetPos();
     				return;
     			}
     		}
+    		snapField.currentChar = c;
+    		snapField.player = player;
     		board.fields[snapField.x+board.size/2][snapField.y+board.size/2] = snapField;
         	player.delChar(this);
     	}

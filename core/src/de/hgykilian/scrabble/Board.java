@@ -48,6 +48,13 @@ public class Board {
 		}
 	}
 	
+	public Field getField(int x, int y) {
+		if (x < size/2 || y < size/2 || x > size/2 || y > size/2) {
+			return null;
+		}
+		return fields[x][y];
+	}
+	
 	public enum PositionType {
 		TOP_LEFT, BOTTOM_LEFT,
 		BOTTOM_RIGHT, MIDDLE,
