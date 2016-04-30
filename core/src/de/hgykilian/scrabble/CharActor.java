@@ -33,8 +33,15 @@ public class CharActor extends Actor {
             public void drag(InputEvent event, float x, float y, int pointer) {
             	actor.moveBy(x - actor.getWidth() / 2, y - actor.getHeight() / 2);
             	Vector2 newpos = new Vector2(getX(), getY());
-            	if (board.getSnapPoint(newpos) != null) {
-            		newpos = board.getSnapPoint(newpos);
+            	Vector2 snapPoint;
+            	if (player.currentWord != null) {
+            		snapPoint = board.getWordSnap(newpos, player.currentWord);
+            	} else {
+            		snapPoint = board.getSnapPoint(newpos);
+            	}
+            	
+            	if (snapPoint != null) {
+            		newpos = snapPoint;
             		actor.setPosition(newpos.x, newpos.y);
             	}
             }
@@ -60,6 +67,14 @@ public class CharActor extends Actor {
     	if (snapField != null) {
     		snapField.currentChar = c;
     		snapField.player = player;
+    		if (player.currentWord == null) {
+        		player.currentWord = new Word(snapField);	
+    		} else {
+    			if (!player.currentWord.add(snapField)) {
+    				resetPos();
+    				return;
+    			}
+    		}
     		board.fields[snapField.x+board.size/2][snapField.y+board.size/2] = snapField;
         	player.delChar(this);
     	}
