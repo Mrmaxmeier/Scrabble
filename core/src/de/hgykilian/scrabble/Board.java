@@ -47,9 +47,9 @@ public class Board {
 			font.draw(batch, String.valueOf((char) (64 + i)), pos.x, pos.y);
 		}
 	}
-	
+
 	public Field getField(int x, int y) {
-		if (x < size/2 || y < size/2 || x > size/2 || y > size/2) {
+		if (x < -size/2 || y < -size/2 || x > size/2 || y > size/2) {
 			return null;
 		}
 		return fields[x][y];
@@ -206,34 +206,23 @@ public class Board {
 			return null;
 		}
 		if (word.direction == null) {
-			int manhattanDist = Math.abs(word.startX - f.x) + Math.abs(word.startY - f.y);
+			int manhattanDist = Math.abs(word.start.x - f.x) + Math.abs(word.start.y - f.y);
 			if (manhattanDist != 1) {
 				return null;
 			}
 		} else {
-			int t = 0;
-			boolean l = false;
-			switch (word.direction) {
-			case UP:
-				t = word.startY - f.y;
-				l = word.startX == f.x;
-				break;
-			case DOWN:
-				t = f.y - word.startY;
-				l = word.startX == f.x;
-				break;
-			case LEFT:
-				t = word.startX - f.x;
-				l = word.startY == f.y;
-				break;
-			case RIGHT:
-				t = f.x - word.startX;
-				l = word.startY == f.y;
-				break;
-			}
-			if (t < 0 || !l) {
+			if (word.direction.x == 0 && word.start.x != f.x) {
 				return null;
 			}
+			if (word.direction.y == 0 && word.start.y != f.y) {
+				return null;
+			}
+
+			de.hgykilian.scrabble.Vector2 p = word.direction.movePosTimes(word.start, word.word.length());
+			if (word.start.x != p.x || word.start.y != p.y) {
+				return null;
+			}
+
 		}
 		return getFieldPos(f.x, f.y, Board.PositionType.BOTTOM_LEFT);
 	}

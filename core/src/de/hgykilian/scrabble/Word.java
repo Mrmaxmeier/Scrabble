@@ -5,10 +5,12 @@ public class Word {
 		UP(0, 1), RIGHT(1, 0), DOWN(0, -1), LEFT(-1, 0);
 		final int x;
 		final int y;
+		final Vector2 vec;
 
-		Direction(int mass, int radius) {
-			this.x = mass;
-			this.y = radius;
+		Direction(int x, int y) {
+			this.x = x;
+			this.y = y;
+			this.vec = new Vector2(x, y);
 		}
 
 		static Direction fromXY(int x, int y) {
@@ -20,17 +22,23 @@ public class Word {
 			}
 			return null;
 		}
+
+		static Direction fromVec(Vector2 v) {
+			return Direction.fromXY(v.x, v.y);
+		}
+
+		Vector2 movePosTimes(Vector2 pos, int times) {
+			return new Vector2(x*times, y*times).add(pos);
+		}
 	}
 
 	String word;
-	int startX;
-	int startY;
+	Vector2 start;
 	Direction direction;
 	private Board board;
 
 	Word(Field field, Board board) {
-		startX = field.x;
-		startY = field.y;
+		start = new Vector2(field.x, field.y);
 		word = field.currentChar.toString();
 		this.board = board;
 	}
@@ -38,7 +46,8 @@ public class Word {
 	public Field[] getFields() {
 		Field[] fields = new Field[word.length() - 1];
 		for (int i = 0; i < word.length(); i++) {
-			Field f = new Field(startX + direction.x * i, startY + direction.y * i, null);
+			Vector2 pos = start.add(direction.vec.mul(i));
+			Field f = new Field(pos.x, pos.y, null);
 			f.currentChar = new Character(word.charAt(i));
 			fields[i] = f;
 		}
@@ -65,24 +74,24 @@ public class Word {
 
 	public void checkNextOnBoard() {
 		while (true) {
-			Field f = board.getField(startX + (word.length() + 1) * direction.x, startY + (word.length() + 1) * direction.y);
+			Vector2 next = start.add(direction.vec.mul(word.length()));
+			Field f = board.getField(next.x, next.y);
 			if (f == null || !f.hasChar()) {
 				return;
 			}
-			word += f.currentChar.toString();
+			word += (char) f.currentChar;
 		}
 	}
 
 	public boolean add(Field field, char character) {
 		if (direction == null) {
-			direction = Direction.fromXY(field.x - startX, field.y - startY);
+			direction = Direction.fromXY(field.x - start.x, field.y - start.y);
 			if (direction == null) {
 				return false;
 			}
 		} else {
-			int nextX = startX + word.length() * direction.x;
-			int nextY = startY + word.length() * direction.y;
-			if (field.x != nextX || field.y != nextY) {
+			Vector2 next = start.add(direction.vec.mul(word.length()));
+			if (field.x != next.x || field.y != next.y) {
 				return false;
 			}
 		}
