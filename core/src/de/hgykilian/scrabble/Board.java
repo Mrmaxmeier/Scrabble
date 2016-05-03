@@ -119,6 +119,14 @@ public class Board {
 		return new Vector2(xP, yP);
 	}
 	
+	public Vector2 getPlayerScorePos(Player.Position playerPos) {
+		int xP = 2;
+		if (playerPos == Player.Position.RIGHT) {
+			xP = viewport.getScreenWidth() - 75;
+		}
+		return new Vector2(xP, viewport.getScreenHeight()-2);
+	}
+	
 	public boolean hasCharNeighbour(int x, int y) {
 		if ((x > 0 && fields[x-1][y].hasChar()) || (x < size-1 && fields[x+1][y].hasChar())) {
 			return true;

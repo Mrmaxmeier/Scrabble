@@ -99,7 +99,7 @@ public class Scrabble {
 	public void draw(BitmapFont font, SpriteBatch batch) {
 		for (int i = 0; i < players.size(); i++) {
 			//draw score von den playern
-			players.get(i).draw();
+			players.get(i).draw(batch, board);
 		}
 	}
 	

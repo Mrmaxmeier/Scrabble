@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class Player {
@@ -16,6 +18,8 @@ public class Player {
 	Board board;
 	Stage stage;
 	Word currentWord;
+	private static int players = 0; //temp
+	private String playerName;
 	private static BitmapFont font;
 	public enum Position {
 		LEFT, RIGHT
@@ -28,12 +32,21 @@ public class Player {
 		this.position = position;
 		score = 0;
 		pass = false;
-//		if ()
+		if (font == null) {
+			font = new BitmapFont();
+			font.setColor(0, 0, 0, 1);
+		}
+		players++;
+		playerName = "Spieler " + players;
+		
 	}
 	
 	public void start() {}
 	
-	public void draw() {}
+	public void draw(SpriteBatch batch, Board board) {
+		Vector2 v = board.getPlayerScorePos(position);
+		font.draw(batch, playerName + ": " + String.valueOf(score), v.x, v.y);
+	}
 	
 	public void pass(Scrabble sc) {
 		pass = true;
