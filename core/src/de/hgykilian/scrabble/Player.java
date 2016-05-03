@@ -3,6 +3,7 @@ package de.hgykilian.scrabble;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class Player {
@@ -15,6 +16,8 @@ public class Player {
 	Board board;
 	Stage stage;
 	ArrayList<Field> currentWord = new ArrayList<>();
+	private static BitmapFont font;
+	
 	public enum Position {
 		LEFT, RIGHT
 	}
@@ -26,6 +29,7 @@ public class Player {
 		this.position = position;
 		score = 0;
 		pass = false;
+//		if ()
 	}
 	
 	public void start() {

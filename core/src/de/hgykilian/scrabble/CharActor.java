@@ -90,7 +90,8 @@ public class CharActor extends Actor {
         Vector2 pos = new Vector2(getX(), getY());
        	pos = board.getSidebarTextPos(pos, Board.PositionType.FIELD_CHAR);
        	font.draw(batch, String.valueOf(c),pos.x, pos.y);
-       	Vector2 scorePos = board.getFieldPos((int)getX(), (int)getY(), Board.PositionType.FIELD_SCORE);
+        Vector2 pos2 = new Vector2(getX(), getY());
+       	Vector2 scorePos = board.getSidebarTextPos(pos2, Board.PositionType.FIELD_SCORE);
        	if (CharacterInfo.getLetterScore(new Character(c)) != 10){
        		font.getData().setScale(0.75f);
        	} else {
