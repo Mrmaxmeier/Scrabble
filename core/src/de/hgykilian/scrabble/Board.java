@@ -1,5 +1,6 @@
 package de.hgykilian.scrabble;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -45,8 +46,13 @@ public class Board {
 			pos = getFieldPos(i-8, -8, PositionType.FIELD_CHAR);
 			font.draw(batch, String.valueOf((char) (64 + i)), pos.x, pos.y);
 		}
-		
-		
+	}
+	
+	public Field getField(int x, int y) {
+		if (x < size/2 || y < size/2 || x > size/2 || y > size/2) {
+			return null;
+		}
+		return fields[x][y];
 	}
 	
 	public enum PositionType {
@@ -181,6 +187,47 @@ public class Board {
 			return getFieldPos(f.x, f.y, Board.PositionType.BOTTOM_LEFT);
 		}
 		return null;
+	}
+	
+	public Vector2 getWordSnap(Vector2 pos, Word word) {
+		if (word == null) {
+			return null;
+		}
+		Field f = getSnapField(pos);
+		if (f == null) {
+			return null;
+		}
+		if (word.direction == null) {
+			int manhattanDist = Math.abs(word.startX - f.x) + Math.abs(word.startY - f.y);
+			if (manhattanDist != 1) {
+				return null;
+			}
+		} else {
+			int t = 0;
+			boolean l = false;
+			switch (word.direction) {
+			case UP:
+				t = word.startY - f.y;
+				l = word.startX == f.x;
+				break;
+			case DOWN:
+				t = f.y - word.startY;
+				l = word.startX == f.x;
+				break;
+			case LEFT:
+				t = word.startX - f.x;
+				l = word.startY == f.y;
+				break;
+			case RIGHT:
+				t = f.x - word.startX;
+				l = word.startY == f.y;
+				break;
+			}
+			if (t < 0 || !l) {
+				return null;
+			}
+		}
+		return getFieldPos(f.x, f.y, Board.PositionType.BOTTOM_LEFT);
 	}
 
 

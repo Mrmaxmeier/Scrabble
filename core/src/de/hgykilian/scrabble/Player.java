@@ -15,9 +15,8 @@ public class Player {
 	boolean secondPass;
 	Board board;
 	Stage stage;
-	ArrayList<Field> currentWord = new ArrayList<>();
+	Word currentWord;
 	private static BitmapFont font;
-	
 	public enum Position {
 		LEFT, RIGHT
 	}
@@ -32,19 +31,15 @@ public class Player {
 //		if ()
 	}
 	
-	public void start() {
-		
-	}
+	public void start() {}
 	
-	public void draw() {
-	}
+	public void draw() {}
 	
 	public void pass(Scrabble sc) {
 		pass = true;
 	}
 	
-	
-	public void end(Scrabble sc){
+	public void end(Scrabble sc) {
 		if (pass = false) {
 			sc.consecutivePasses = 0;
 		}
@@ -58,7 +53,7 @@ public class Player {
 				chars.add(ca);
 				this.stage.addActor(ca);
 			}
-		updateChars();
+			updateChars();
 		}
 		pass = false;
 	}

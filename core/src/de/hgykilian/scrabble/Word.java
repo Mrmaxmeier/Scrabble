@@ -2,33 +2,43 @@ package de.hgykilian.scrabble;
 
 public class Word {
 	enum Direction {
-		UP, RIGHT, DOWN, LEFT
+		UP(0, 1), RIGHT(1, 0), DOWN(0, -1), LEFT(-1, 0);
+		final int x;
+		final int y;
+
+		Direction(int mass, int radius) {
+			this.x = mass;
+			this.y = radius;
+		}
+
+		static Direction fromXY(int x, int y) {
+			Direction[] directions = { UP, RIGHT, DOWN, LEFT };
+			for (Direction d : directions) {
+				if (d.x == x && d.y == y) {
+					return d;
+				}
+			}
+			return null;
+		}
 	}
+
 	String word;
 	int startX;
 	int startY;
 	Direction direction;
+	private Board board;
+
+	Word(Field field, Board board) {
+		startX = field.x;
+		startY = field.y;
+		word = field.currentChar.toString();
+		this.board = board;
+	}
 
 	public Field[] getFields() {
 		Field[] fields = new Field[word.length() - 1];
-		int dX = 0;
-		int dY = 0;
-		switch (direction) {
-		case UP:
-			dY = 1;
-			break;
-		case DOWN:
-			dY = -1;
-			break;
-		case LEFT:
-			dX = -1;
-			break;
-		case RIGHT:
-			dX = 1;
-			break;
-		}
 		for (int i = 0; i < word.length(); i++) {
-			Field f = new Field(startX + dX * i, startY + dY * i, null);
+			Field f = new Field(startX + direction.x * i, startY + direction.y * i, null);
 			f.currentChar = new Character(word.charAt(i));
 			fields[i] = f;
 		}
@@ -51,5 +61,34 @@ public class Word {
 			}
 		}
 		return score;
+	}
+
+	public void checkNextOnBoard() {
+		while (true) {
+			Field f = board.getField(startX + (word.length() + 1) * direction.x, startY + (word.length() + 1) * direction.y);
+			if (f == null || !f.hasChar()) {
+				return;
+			}
+			word += f.currentChar.toString();
+		}
+	}
+
+	public boolean add(Field field, char character) {
+		if (direction == null) {
+			direction = Direction.fromXY(field.x - startX, field.y - startY);
+			if (direction == null) {
+				return false;
+			}
+		} else {
+			int nextX = startX + word.length() * direction.x;
+			int nextY = startY + word.length() * direction.y;
+			if (field.x != nextX || field.y != nextY) {
+				return false;
+			}
+		}
+
+		word += character;
+		checkNextOnBoard();
+		return true;
 	}
 }
