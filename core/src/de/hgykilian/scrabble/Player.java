@@ -15,6 +15,7 @@ public class Player {
 	boolean pass;
 	boolean firstPass;
 	boolean secondPass;
+	boolean isActive;
 	Board board;
 	Stage stage;
 	Word currentWord;
@@ -45,7 +46,11 @@ public class Player {
 	
 	public void draw(SpriteBatch batch, Board board) {
 		Vector2 v = board.getPlayerScorePos(position);
-		font.draw(batch, playerName + ": " + String.valueOf(score), v.x, v.y);
+		String text = playerName + ": " + String.valueOf(score);
+		if (isActive) {
+			text += " (Am Zug)";
+		}
+		font.draw(batch, text, v.x, v.y);
 	}
 	
 	public void pass(Scrabble sc) {
@@ -59,6 +64,13 @@ public class Player {
 		fillChars(sc);
 	}
 	
+	public void setActive(boolean active) {
+		isActive = active;
+		for (CharActor charActor : chars) {
+			charActor.setDraggable(active);
+		}
+	}
+
 	public void fillChars(Scrabble game) {
 		if (chars.size() < 7) {
 			for(int i = chars.size()-1; i <= 7; i++){
@@ -83,6 +95,9 @@ public class Player {
 		for (int i = 0; i < chars.size(); i++) {
 			chars.get(i).index = i;	
 			chars.get(i).resetPos();
+			for (CharActor charActor : chars) {
+				charActor.setDraggable(isActive);
+			}
 		}
 	}
 

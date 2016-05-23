@@ -41,6 +41,8 @@ public class ScrabbleMain extends ApplicationAdapter {
 				i++;
 			}
 		}
+
+		game.update();
 	}
 
 	@Override

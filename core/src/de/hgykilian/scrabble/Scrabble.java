@@ -99,6 +99,7 @@ public class Scrabble {
 		} else {
 			currentPlayer = 0;
 		}
+		update();
 	}
 	
 	public void draw(BitmapFont font, SpriteBatch batch) {
@@ -125,5 +126,11 @@ public class Scrabble {
 	
 	public void endGame(){
 		
+	}
+
+	public void update() {
+		for (int i = 0; i < players.size(); i++) {
+			players.get(i).setActive(i == currentPlayer);
+		}
 	}
 }

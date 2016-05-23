@@ -18,6 +18,7 @@ public class CharActor extends Actor {
     Board board;
     Player player;
     int index;
+    boolean isDraggable;
     static BitmapFont font;
 
     public CharActor (final char c, final Player player) {
@@ -47,6 +48,9 @@ public class CharActor extends Actor {
             }
             
             public void dragStart(InputEvent event, float x, float y, int pointer)  {
+            	if (!isDraggable) {
+            		this.cancel();
+            	}
             	//actor.debug();
             }
             
@@ -96,7 +100,11 @@ public class CharActor extends Actor {
         renderer.translate(getX(), getY(), 0);
 
         renderer.begin(ShapeType.Filled);
-        renderer.setColor(Color.BLUE);
+        if (isDraggable) {
+        	renderer.setColor(Color.BLUE);
+        } else {
+            renderer.setColor(Color.BROWN);
+        }
         renderer.rect(0, 0, getWidth(), getHeight());
         renderer.end();
     	
@@ -117,5 +125,8 @@ public class CharActor extends Actor {
        	font.getData().setScale(1);
         	
         }
-    }
 
+	public void setDraggable(boolean draggable) {
+		isDraggable = draggable;
+	}
+}
