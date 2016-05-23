@@ -52,7 +52,7 @@ public class Board {
 		if (x < -size/2 || y < -size/2 || x > size/2 || y > size/2) {
 			return null;
 		}
-		return fields[x][y];
+		return fields[x+size/2][y+size/2];
 	}
 	
 	public enum PositionType {

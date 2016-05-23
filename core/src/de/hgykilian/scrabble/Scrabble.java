@@ -12,7 +12,7 @@ public class Scrabble {
 	Queue<Character> charPool = new LinkedList<Character>();
 	int currentPlayer;
 	int consecutivePasses = 0;
-	
+
 	public Scrabble() {
 		board = new Board();
 		currentPlayer = 0;
@@ -50,7 +50,7 @@ public class Scrabble {
 		fcp('X', 1);
 		fcp('Q', 1);
 		fcp('Y', 1);
-		Collections.shuffle((List<Character>) charPool);
+		shuffle();
 		
 		// 2 Joker/Blankos
 	}
@@ -60,12 +60,17 @@ public class Scrabble {
 			charPool.add(new Character(c));
 		}
 	}
+
+	@SuppressWarnings("unchecked")
+	public void shuffle() {
+		Collections.shuffle((List<Character>) charPool);
+	}
 	
 	public void addChar(char[] c) {
 		for (char ch : c) {
 			charPool.add(ch);
 		}
-		Collections.shuffle((List<Character>) charPool);
+		shuffle();
 	}
 	
 	public Character popChar() {
