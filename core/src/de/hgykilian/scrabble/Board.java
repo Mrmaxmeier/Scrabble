@@ -1,12 +1,10 @@
 package de.hgykilian.scrabble;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import jdk.internal.util.xml.impl.Pair;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -168,7 +166,8 @@ public class Board {
 			}
 		}
 
-		List<FieldDistPair> pairs = f.stream().map(field -> new FieldDistPair(field, point))
+		List<FieldDistPair> pairs = f.stream()
+				.map(field -> new FieldDistPair(field, point))
 				.filter(pair -> pair.dist < fieldSize * fieldSize)
 				.collect(Collectors.toCollection(ArrayList::new));
 
