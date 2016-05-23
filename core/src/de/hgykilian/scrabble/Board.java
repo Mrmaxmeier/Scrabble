@@ -157,35 +157,42 @@ public class Board {
 		return Arrays.stream(fields);
 	}
 
-	public Field getSnapField(Vector2 pos) {
+	public Field getNearest(List<Field> f, Vector2 point) {
 
 		class FieldDistPair {
 			public Field field;
 			public float dist;
-			public FieldDistPair() {}
 			public FieldDistPair(Field f, Vector2 point) {
 				field = f;
-				dist = getFieldPos(field.x, field.y, Board.PositionType.BOTTOM_LEFT).sub(pos).len2();
+				dist = getFieldPos(field.x, field.y, Board.PositionType.BOTTOM_LEFT).sub(point).len2();
 			}
 		}
 
-		List<FieldDistPair> f = fields()
-				.filter(field -> !field.hasChar())
-				.filter(field -> hasCharNeighbour(field) || (field.x == 0 && field.y == 0))
-				.map(field -> new FieldDistPair(field, pos))
-				.filter(pair -> pair.dist < fieldSize * fieldSize / 2f)
+		List<FieldDistPair> pairs = f.stream().map(field -> new FieldDistPair(field, point))
+				.filter(pair -> pair.dist < fieldSize * fieldSize)
 				.collect(Collectors.toCollection(ArrayList::new));
 
-		if (f.size() < 1) {
+		if (pairs.size() < 1) {
 			return null;
 		}
 
-		float dist = f.stream()
+		float dist = pairs.stream()
 				.map(pair -> pair.dist)
 				.min(Float::compare).get();
 
-		return f.stream()
-				.filter(pair -> pair.dist == dist).findFirst().orElse(new FieldDistPair()).field;
+		return pairs.stream()
+				.filter(pair -> pair.dist == dist)
+				.findFirst().get().field;
+	}
+
+	public Field getSnapField(Vector2 pos) {
+
+		List<Field> fieldList = fields()
+				.filter(field -> !field.hasChar())
+				.filter(field -> hasCharNeighbour(field) || (field.x == 0 && field.y == 0))
+				.collect(Collectors.toCollection(ArrayList::new));
+
+		return getNearest(fieldList, pos);
 	}
 	
 	public Vector2 getSnapPoint(Vector2 pos) {
@@ -200,28 +207,33 @@ public class Board {
 		if (word == null) {
 			return null;
 		}
-		Field f = getSnapField(pos);
+
+		List<Field> fieldList = fields()
+				.filter(field -> !field.hasChar())
+				.filter(f -> {
+					if (word.direction == null) {
+						int manhattanDist = Math.abs(word.start.x - f.x) + Math.abs(word.start.y - f.y);
+						return manhattanDist == 1;
+					} else {
+						if (word.direction.x == 0 && word.start.x != f.x) {
+							return false;
+						}
+						if (word.direction.y == 0 && word.start.y != f.y) {
+							return false;
+						}
+
+						de.hgykilian.scrabble.Vector2 p = word.direction.movePosTimes(word.start, word.word.length());
+						if (f.x != p.x || f.y != p.y) {
+							return false;
+						}
+					}
+					return true;
+				})
+				.collect(Collectors.toCollection(ArrayList::new));
+
+		Field f = getNearest(fieldList, pos);
 		if (f == null) {
 			return null;
-		}
-		if (word.direction == null) {
-			int manhattanDist = Math.abs(word.start.x - f.x) + Math.abs(word.start.y - f.y);
-			if (manhattanDist != 1) {
-				return null;
-			}
-		} else {
-			if (word.direction.x == 0 && word.start.x != f.x) {
-				return null;
-			}
-			if (word.direction.y == 0 && word.start.y != f.y) {
-				return null;
-			}
-
-			de.hgykilian.scrabble.Vector2 p = word.direction.movePosTimes(word.start, word.word.length());
-			if (word.start.x != p.x || word.start.y != p.y) {
-				return null;
-			}
-
 		}
 		return getFieldPos(f.x, f.y, Board.PositionType.BOTTOM_LEFT);
 	}
