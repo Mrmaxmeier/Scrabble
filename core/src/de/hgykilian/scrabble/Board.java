@@ -6,6 +6,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import jdk.internal.util.xml.impl.Pair;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Board {
 	int size = 15;
@@ -127,7 +134,9 @@ public class Board {
 		return new Vector2(xP, viewport.getScreenHeight()-2);
 	}
 	
-	public boolean hasCharNeighbour(int x, int y) {
+	public boolean hasCharNeighbour(Field field) {
+		int x = field.x + size/2;
+		int y = field.y + size/2;
 		if ((x > 0 && fields[x-1][y].hasChar()) || (x < size-1 && fields[x+1][y].hasChar())) {
 			return true;
 		}
@@ -136,57 +145,47 @@ public class Board {
 		}
 		return false;
 	}
-	
+
+	public Stream<Field> fields() {
+		Field[] fields = new Field[size * size];
+		int index = 0;
+		for ( Field[] rows : this.fields) {
+			for (Field field : rows) {
+				fields[index++] = field;
+			}
+		}
+		return Arrays.stream(fields);
+	}
+
 	public Field getSnapField(Vector2 pos) {
-		float nearestDist = 0;
-		Field nearestField = null;
-		float nearestUsableDist = 0;
-		Field nearestUsableField = null;
-		for (int y = 0; y < size; y++) {
-			for (int x = 0; x < size; x++) {
-				// Vector2 gibt vec2 zurück, modifiziert aber auch inplace .__.
-				Vector2 fpos = getFieldPos(x-size/2, y-size/2, Board.PositionType.BOTTOM_LEFT);
-				if (nearestDist > fpos.cpy().sub(pos).len2() || nearestField == null) {
-					nearestDist = fpos.sub(pos).len2();
-					nearestField = fields[x][y];
-				}
-				if (!hasCharNeighbour(x, y) || fields[x][y].hasChar()) {
-					continue;
-				}
-				
-				if (nearestUsableDist > fpos.cpy().sub(pos).len2() || nearestUsableField == null) {
-					nearestUsableDist = fpos.sub(pos).len2();
-					nearestUsableField = fields[x][y];
-				}
+
+		class FieldDistPair {
+			public Field field;
+			public float dist;
+			public FieldDistPair() {}
+			public FieldDistPair(Field f, Vector2 point) {
+				field = f;
+				dist = getFieldPos(field.x, field.y, Board.PositionType.BOTTOM_LEFT).sub(pos).len2();
 			}
 		}
-		
-		if (nearestDist > fieldSize * fieldSize / 2) {
+
+		List<FieldDistPair> f = fields()
+				.filter(field -> !field.hasChar())
+				.filter(field -> hasCharNeighbour(field) || (field.x == 0 && field.y == 0))
+				.map(field -> new FieldDistPair(field, pos))
+				.filter(pair -> pair.dist < fieldSize * fieldSize / 2f)
+				.collect(Collectors.toCollection(ArrayList::new));
+
+		if (f.size() < 1) {
 			return null;
 		}
-		
-		
-		if (nearestField.currentChar == null) {
-			int index_x = nearestField.x + size/2;
-			int index_y = nearestField.y + size/2;
-			for (int i = 0; i < (size - index_x); i++) {
-				if (fields[index_x + i][index_y].hasChar()) {
-					return nearestField;
-				}
-			}
-		
-			for (int i = 0; i < index_y; i++) {
-				if (fields[index_x][index_y - i].hasChar()) {
-					return nearestField;
-				}
-			}
-		}
-		
-		if (nearestUsableField == null || nearestUsableDist > fieldSize) {
-			return null;
-		}
-		
-		return nearestUsableField;
+
+		float dist = f.stream()
+				.map(pair -> pair.dist)
+				.min(Float::compare).get();
+
+		return f.stream()
+				.filter(pair -> pair.dist == dist).findFirst().orElse(new FieldDistPair()).field;
 	}
 	
 	public Vector2 getSnapPoint(Vector2 pos) {

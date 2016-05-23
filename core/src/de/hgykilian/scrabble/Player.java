@@ -13,8 +13,6 @@ public class Player {
 	List<CharActor> chars = new ArrayList<>();
 	int score;
 	boolean pass;
-	boolean firstPass;
-	boolean secondPass;
 	boolean isActive;
 	Board board;
 	Stage stage;
