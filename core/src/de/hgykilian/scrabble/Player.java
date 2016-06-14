@@ -47,6 +47,8 @@ public class Player {
 		String text = playerName + ": " + String.valueOf(score);
 		if (isActive) {
 			text += " (Am Zug)";
+			if (position == Position.RIGHT)
+				v.x -= 65;
 		}
 		font.draw(batch, text, v.x, v.y);
 	}
