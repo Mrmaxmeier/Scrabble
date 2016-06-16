@@ -183,12 +183,31 @@ public class Board {
 				.filter(pair -> pair.dist == dist)
 				.findFirst().get().field;
 	}
+	
+	public boolean testCharInDir(de.hgykilian.scrabble.Vector2 pos, de.hgykilian.scrabble.Vector2 dir) {
+		for (int i = 0; i < size; i++) {
+			de.hgykilian.scrabble.Vector2 v = pos.add(dir.mul(i));
+			Field f = getField(v.x, v.y);
+			if (f == null) {
+				return false;
+			} else if (f.hasChar()) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public Field getSnapField(Vector2 pos) {
 
 		List<Field> fieldList = fields()
 				.filter(field -> !field.hasChar())
-				.filter(field -> hasCharNeighbour(field) || (field.x == 0 && field.y == 0))
+				.filter(field -> {
+					if (hasCharNeighbour(field) || (field.x == 0 && field.y == 0)) {
+						return true;
+					}
+					de.hgykilian.scrabble.Vector2 p = new de.hgykilian.scrabble.Vector2(field.x, field.y);
+					return testCharInDir(p, new de.hgykilian.scrabble.Vector2(1, 0)) || testCharInDir(p, new de.hgykilian.scrabble.Vector2(0, -1));
+				})
 				.collect(Collectors.toCollection(ArrayList::new));
 
 		return getNearest(fieldList, pos);
