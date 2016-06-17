@@ -111,7 +111,11 @@ public class Scrabble {
 	
 	public void pass() {
 		consecutivePasses++;
-		players.get(currentPlayer).pass(this);
+		players.get(currentPlayer).pass();
+	}
+	
+	public void checkWord() {
+		players.get(currentPlayer).checkWord();
 	}
 	
 	public void replaceChar(CharActor[] c) {
@@ -121,7 +125,6 @@ public class Scrabble {
 			Gdx.app.log("Scrabble", "Remaining letters < 7 | Replacing not allowed");
 		}
 		
-		nextPlayer();
 	}
 	
 	public void endGame(){

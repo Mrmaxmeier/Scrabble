@@ -82,6 +82,15 @@ public class ScrabbleMain extends ApplicationAdapter implements InputProcessor {
 	@Override
 	public boolean keyDown(int arg0) {
 		if (Input.Keys.ENTER == arg0) {
+			if (game.players.get(game.currentPlayer).currentTrashChars.isEmpty()) {
+				if (game.players.get(game.currentPlayer).currentWord == null) {
+					game.pass(); // current player passes
+				} else {
+					game.checkWord(); // current player has a word
+				}
+			} else {
+				game.replaceChar(game.players.get(game.currentPlayer).currentTrashChars.toArray(new CharActor[0])); //// curret player change chars
+			}
 			game.nextPlayer();
 			return true;
 		}

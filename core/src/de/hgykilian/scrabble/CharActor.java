@@ -82,6 +82,12 @@ public class CharActor extends Actor {
     		snapField.player = player;
     		board.fields[snapField.x+board.size/2][snapField.y+board.size/2] = snapField;
         	player.delChar(this);
+    	} else {
+    		if (board.isInChangingArea(new Vector2(getX(), getY()))) {
+//    			System.out.println("Erfolgreich!");
+    			player.currentTrashChars.add(this);
+    			player.delChar(this);
+    		}
     	}
     	resetPos();
     }

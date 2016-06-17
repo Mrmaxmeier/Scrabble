@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import de.hgykilian.scrabble.Player.Position;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -132,6 +134,17 @@ public class Board {
 		return new Vector2(xP, viewport.getScreenHeight()-2);
 	}
 	
+	public boolean isInChangingArea (Vector2 v2) {
+		boolean a = v2.x > viewport.getScreenWidth()/2 - 100;
+		boolean b = v2.x < viewport.getScreenWidth()/2 + 100;
+		boolean c = v2.y > viewport.getScreenHeight() - 60;
+		boolean d = v2.y < viewport.getScreenHeight() + 60;
+//		System.out.println(v2.x + " " + v2.y + " " + viewport.getScreenHeight()+ " "  + viewport.getScreenWidth() + Boolean.toString(a) + Boolean.toString(b) + Boolean.toString(c) + Boolean.toString(d));
+		if (a && b && c && d)
+			return true;
+		return false;
+	}
+	
 	public boolean hasCharNeighbour(Field field) {
 		int x = field.x + size/2;
 		int y = field.y + size/2;
@@ -184,9 +197,9 @@ public class Board {
 				.findFirst().get().field;
 	}
 	
-	public boolean testCharInDir(de.hgykilian.scrabble.Vector2 pos, de.hgykilian.scrabble.Vector2 dir) {
+	public boolean testCharInDir(de.hgykilian.scrabble.Vector2X pos, de.hgykilian.scrabble.Vector2X dir) {
 		for (int i = 0; i < size; i++) {
-			de.hgykilian.scrabble.Vector2 v = pos.add(dir.mul(i));
+			de.hgykilian.scrabble.Vector2X v = pos.add(dir.mul(i));
 			Field f = getField(v.x, v.y);
 			if (f == null) {
 				return false;
@@ -205,8 +218,8 @@ public class Board {
 					if (hasCharNeighbour(field) || (field.x == 0 && field.y == 0)) {
 						return true;
 					}
-					de.hgykilian.scrabble.Vector2 p = new de.hgykilian.scrabble.Vector2(field.x, field.y);
-					return testCharInDir(p, new de.hgykilian.scrabble.Vector2(1, 0)) || testCharInDir(p, new de.hgykilian.scrabble.Vector2(0, -1));
+					de.hgykilian.scrabble.Vector2X p = new de.hgykilian.scrabble.Vector2X(field.x, field.y);
+					return testCharInDir(p, new de.hgykilian.scrabble.Vector2X(1, 0)) || testCharInDir(p, new de.hgykilian.scrabble.Vector2X(0, -1));
 				})
 				.collect(Collectors.toCollection(ArrayList::new));
 
@@ -240,7 +253,7 @@ public class Board {
 							return false;
 						}
 
-						de.hgykilian.scrabble.Vector2 p = word.direction.movePosTimes(word.start, word.word.length());
+						de.hgykilian.scrabble.Vector2X p = word.direction.movePosTimes(word.start, word.word.length());
 						if (f.x != p.x || f.y != p.y) {
 							return false;
 						}

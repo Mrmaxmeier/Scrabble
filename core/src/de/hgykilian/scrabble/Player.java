@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 public class Player {
 	ArrayList<Word> words = new ArrayList<Word>();
 	List<CharActor> chars = new ArrayList<>();
+	List<CharActor> currentTrashChars = new ArrayList<>();
 	int score;
 	boolean pass;
 	boolean isActive;
@@ -40,7 +41,9 @@ public class Player {
 		
 	}
 	
-	public void start() {}
+	public void start() {
+		currentTrashChars = new ArrayList<>();
+	}
 	
 	public void draw(SpriteBatch batch, Board board) {
 		Vector2 v = board.getPlayerScorePos(position);
@@ -53,7 +56,7 @@ public class Player {
 		font.draw(batch, text, v.x, v.y);
 	}
 	
-	public void pass(Scrabble sc) {
+	public void pass() {
 		pass = true;
 	}
 	
@@ -61,6 +64,7 @@ public class Player {
 		if (pass = false) {
 			sc.consecutivePasses = 0;
 		}
+		currentWord = null;
 		fillChars(sc);
 	}
 	
@@ -69,11 +73,31 @@ public class Player {
 		for (CharActor charActor : chars) {
 			charActor.setDraggable(active);
 		}
+		if (active) {
+			start();
+		}
+	}
+	
+	public void checkWord() {
+		String word = currentWord.word;
+		if (WordChecker.check(word)) {
+			score += currentWord.getScore();
+		} else {
+			pass();
+			CharActor[] ca = currentWord.clearWord(this);
+			for (CharActor tCA : ca) {
+				chars.add(tCA);
+				this.stage.addActor(tCA);
+			}
+			updateChars();
+			currentWord = null;
+			
+		}
 	}
 
 	public void fillChars(Scrabble game) {
 		if (chars.size() < 7) {
-			for(int i = chars.size()-1; i <= 7; i++){
+			for(int i = chars.size(); i < 7; i++){
 				CharActor ca = new CharActor(game.popChar(), this);
 				chars.add(ca);
 				this.stage.addActor(ca);

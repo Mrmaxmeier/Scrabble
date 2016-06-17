@@ -1,16 +1,18 @@
 package de.hgykilian.scrabble;
 
+
+
 public class Word {
 	enum Direction {
 		UP(0, 1), RIGHT(1, 0), DOWN(0, -1), LEFT(-1, 0);
 		final int x;
 		final int y;
-		final Vector2 vec;
+		final Vector2X vec;
 
 		Direction(int x, int y) {
 			this.x = x;
 			this.y = y;
-			this.vec = new Vector2(x, y);
+			this.vec = new Vector2X(x, y);
 		}
 
 		static Direction fromXY(int x, int y) {
@@ -23,30 +25,30 @@ public class Word {
 			return null;
 		}
 
-		static Direction fromVec(Vector2 v) {
+		static Direction fromVec(Vector2X v) {
 			return Direction.fromXY(v.x, v.y);
 		}
 
-		Vector2 movePosTimes(Vector2 pos, int times) {
-			return new Vector2(x*times, y*times).add(pos);
+		Vector2X movePosTimes(Vector2X pos, int times) {
+			return new Vector2X(x*times, y*times).add(pos);
 		}
 	}
 
 	String word;
-	Vector2 start;
+	Vector2X start;
 	Direction direction;
 	private Board board;
 
 	Word(Field field, Board board) {
-		start = new Vector2(field.x, field.y);
+		start = new Vector2X(field.x, field.y);
 		word = field.currentChar.toString();
 		this.board = board;
 	}
 
 	public Field[] getFields() {
-		Field[] fields = new Field[word.length() - 1];
+		Field[] fields = new Field[word.length()];
 		for (int i = 0; i < word.length(); i++) {
-			Vector2 pos = start.add(direction.vec.mul(i));
+			Vector2X pos = start.add(direction.vec.mul(i));
 			Field f = new Field(pos.x, pos.y, null);
 			f.currentChar = new Character(word.charAt(i));
 			fields[i] = f;
@@ -74,7 +76,7 @@ public class Word {
 
 	public void checkNextOnBoard() {
 		while (true) {
-			Vector2 next = start.add(direction.vec.mul(word.length()));
+			Vector2X next = start.add(direction.vec.mul(word.length()));
 			Field f = board.getField(next.x, next.y);
 			if (f == null || !f.hasChar()) {
 				return;
@@ -90,7 +92,7 @@ public class Word {
 				return false;
 			}
 		} else {
-			Vector2 next = start.add(direction.vec.mul(word.length()));
+			Vector2X next = start.add(direction.vec.mul(word.length()));
 			if (field.x != next.x || field.y != next.y) {
 				return false;
 			}
@@ -99,5 +101,16 @@ public class Word {
 		word += character;
 		checkNextOnBoard();
 		return true;
+	}
+	
+	public CharActor[] clearWord (Player player) {
+//		Field snapField = board.getSnapField(new Vector2(getX(), getY()));
+
+		char[] c = word.toCharArray();
+		CharActor[] ca = new CharActor[c.length];
+		for (int i = 0; i < c.length; i++) {
+			ca[i] = new CharActor(c[i], player);
+		}
+		return ca;
 	}
 }
