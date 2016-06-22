@@ -1,6 +1,6 @@
 package de.hgykilian.scrabble;
 
-
+import java.util.ArrayList;
 
 public class Word {
 	enum Direction {
@@ -38,6 +38,7 @@ public class Word {
 	Vector2X start;
 	Direction direction;
 	private Board board;
+	ArrayList<Integer> alreadyExistingLetters = new ArrayList<Integer>();
 
 	Word(Field field, Board board) {
 		start = new Vector2X(field.x, field.y);
@@ -82,6 +83,7 @@ public class Word {
 				return;
 			}
 			word += (char) f.currentChar;
+			alreadyExistingLetters.add(word.length()-1);
 		}
 	}
 
@@ -105,12 +107,40 @@ public class Word {
 	
 	public CharActor[] clearWord (Player player) {
 //		Field snapField = board.getSnapField(new Vector2(getX(), getY()));
+		int x = start.x + board.size/2;
+		int y = start.y + board.size/2;
+		for (int i = 0; i < word.length(); i++) {
+			if (!alreadyExistingLetters.contains(i)) {
+				board.fields[x][y].currentChar = null;
+				board.fields[x][y].player = null;
+			}
+			
+			if (direction != null) {
+				switch (direction) {
+					case DOWN: y--;
+					break;
+					case UP: y++;
+					break;
+					case LEFT: x--;
+					break;
+					case RIGHT: x++;
+					break;
+					default: break;
+				}
+			} else {
+				break;
+			}
+			
+				
+		}
 
 		char[] c = word.toCharArray();
-		CharActor[] ca = new CharActor[c.length];
+		ArrayList<CharActor> ca = new ArrayList<CharActor>();
 		for (int i = 0; i < c.length; i++) {
-			ca[i] = new CharActor(c[i], player);
+			if (!alreadyExistingLetters.contains(i)) {
+				ca.add(new CharActor(c[i], player));
+			}
 		}
-		return ca;
+		return ca.toArray(new CharActor[0]);
 	}
 }

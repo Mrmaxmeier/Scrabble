@@ -46,7 +46,7 @@ public class ScrabbleMain extends ApplicationAdapter implements InputProcessor {
 	public void render () {
 		viewport.apply();
 		Gdx.gl.glClearColor(1, 1, 1, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);;
 		batch.setProjectionMatrix(viewport.getCamera().combined);
         shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
 
@@ -72,6 +72,15 @@ public class ScrabbleMain extends ApplicationAdapter implements InputProcessor {
 		batch.end();
 		stage.act();
         stage.draw();
+        
+        if (game.gameFinished) {
+//        	game.drawOverlay(shapeRenderer);
+        	shapeRenderer.begin(ShapeType.Filled);
+        	shapeRenderer.setColor(0, 0, 0, 0);
+        	shapeRenderer.rect(0, 0, viewport.getScreenWidth(), viewport.getScreenHeight());
+        	shapeRenderer.end();
+        	
+        }
 	}
 	
 	@Override
@@ -81,7 +90,7 @@ public class ScrabbleMain extends ApplicationAdapter implements InputProcessor {
 
 	@Override
 	public boolean keyDown(int arg0) {
-		if (Input.Keys.ENTER == arg0) {
+		if (Input.Keys.ENTER == arg0 && !game.gameFinished) {
 			if (game.players.get(game.currentPlayer).currentTrashChars.isEmpty()) {
 				if (game.players.get(game.currentPlayer).currentWord == null) {
 					game.pass(); // current player passes
