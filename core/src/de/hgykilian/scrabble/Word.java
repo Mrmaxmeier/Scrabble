@@ -44,6 +44,16 @@ public class Word {
 		start = new Vector2X(field.x, field.y);
 		word = field.currentChar.toString();
 		this.board = board;
+		
+		Direction[] dc =  {Direction.DOWN, Direction.RIGHT};
+		for (Direction check : dc) {
+			Field test = board.getField(start.add(check.vec).x, start.add(check.vec).y);
+			if (test != null && test.hasChar()) {
+				this.direction = check;
+				checkNextOnBoard();
+				break;
+			}
+		}
 	}
 
 	public Field[] getFields() {

@@ -29,17 +29,12 @@ public class WordChecker {
 			} else {
 				Gdx.app.log("Word", "Word not found");
 			}
-			
-			
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return true; // FIXME
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
 		
 		return found;
 		

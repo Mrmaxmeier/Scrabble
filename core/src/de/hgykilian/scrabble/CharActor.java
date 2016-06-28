@@ -127,10 +127,10 @@ public class CharActor extends Actor {
        	} else {
        		font.getData().setScale(0.65f, 0.75f);
        	}
+       	
        	font.draw(batch, String.valueOf(CharacterInfo.getLetterScore(new Character(c))), scorePos.x, scorePos.y);
-       	font.getData().setScale(1);
-        	
-        }
+       	font.getData().setScale(1);  	
+    }
 
 	public void setDraggable(boolean draggable) {
 		isDraggable = draggable;
