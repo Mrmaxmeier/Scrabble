@@ -60,6 +60,9 @@ public class ScrabbleMain extends ApplicationAdapter implements InputProcessor {
 			}
 		}
         shapeRenderer.end();
+        shapeRenderer.begin(ShapeType.Line);
+        game.board.drawTrashArea(shapeRenderer);
+        shapeRenderer.end();
         
         batch.begin();
         for (Field[] row : game.board.fields) {

@@ -3,6 +3,7 @@ package de.hgykilian.scrabble;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -129,7 +130,7 @@ public class Board {
 	public Vector2 getPlayerScorePos(Player.Position playerPos) {
 		int xP = 2;
 		if (playerPos == Player.Position.RIGHT) {
-			xP = viewport.getScreenWidth() - 75;
+			xP = viewport.getScreenWidth() - 100; //75
 		}
 		return new Vector2(xP, viewport.getScreenHeight()-2);
 	}
@@ -273,6 +274,10 @@ public class Board {
 	public void drawBackground(ShapeRenderer shapeRenderer) {
 		Vector2 from = getFieldPos(-size/2, -size/2, PositionType.BOTTOM_LEFT);
 		int width = (fieldSize + fieldGap) * size + fieldGap;
-    	shapeRenderer.rect(from.x - fieldGap, from.y - fieldGap, width, width);
+    	shapeRenderer.rect(from.x - fieldGap, from.y - fieldGap, width, width); 
+	}
+	
+	public void drawTrashArea(ShapeRenderer shapeRenderer) {
+    	shapeRenderer.rect(viewport.getScreenWidth()/2 - 100, viewport.getScreenHeight() - 60, 200, 120);
 	}
 }
