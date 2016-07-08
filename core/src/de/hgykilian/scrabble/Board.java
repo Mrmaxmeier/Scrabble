@@ -139,7 +139,7 @@ public class Board {
 		boolean a = v2.x > viewport.getScreenWidth()/2 - 100;
 		boolean b = v2.x < viewport.getScreenWidth()/2 + 100;
 		boolean c = v2.y > viewport.getScreenHeight() - 60;
-		boolean d = v2.y < viewport.getScreenHeight() + 60;
+		boolean d = v2.y < viewport.getScreenHeight();
 //		System.out.println(v2.x + " " + v2.y + " " + viewport.getScreenHeight()+ " "  + viewport.getScreenWidth() + Boolean.toString(a) + Boolean.toString(b) + Boolean.toString(c) + Boolean.toString(d));
 		if (a && b && c && d)
 			return true;
@@ -278,6 +278,6 @@ public class Board {
 	}
 	
 	public void drawTrashArea(ShapeRenderer shapeRenderer) {
-    	shapeRenderer.rect(viewport.getScreenWidth()/2 - 100, viewport.getScreenHeight() - 60, 200, 120);
+    	shapeRenderer.rect(viewport.getScreenWidth()/2 - 100, viewport.getScreenHeight() - 60, 200, 60);
 	}
 }

@@ -5,7 +5,6 @@ import java.util.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class Scrabble {
 	Board board;
@@ -14,6 +13,7 @@ public class Scrabble {
 	int currentPlayer;
 	int consecutivePasses = 0;
 	boolean gameFinished = false;
+	boolean checkNot = false;
 
 	public Scrabble() {
 		board = new Board();
@@ -117,7 +117,8 @@ public class Scrabble {
 	}
 	
 	public void checkWord() {
-		players.get(currentPlayer).checkWord();
+		players.get(currentPlayer).checkWord(checkNot);
+		checkNot = false;
 	}
 	
 	public void replaceChar(CharActor[] c) {
@@ -131,6 +132,9 @@ public class Scrabble {
 	
 	public void endGame(){
 		gameFinished = true;
+		for (Player p : players) {
+			p.isActive = false;
+		}
 	}
 
 	public void update() {
@@ -139,9 +143,4 @@ public class Scrabble {
 		}
 	}
 	
-	public void drawOverlay(ShapeRenderer sP) {
-//		sP.begin();
-//		sP.setColor(1, 1, 1, 0);
-//		sP.rect(0, 0, v, height);
-	}
 }

@@ -78,9 +78,9 @@ public class Player {
 		}
 	}
 	
-	public void checkWord() {
+	public void checkWord(boolean checkNot) {
 		String word = currentWord.word;
-		if (WordChecker.check(word)) {
+		if (WordChecker.check(word) || checkNot) {
 			score += currentWord.getScore();
 		} else {
 			pass();
@@ -108,7 +108,9 @@ public class Player {
 	}
 
 	public void replaceChar(Scrabble sc, CharActor[] c) {
-		for (CharActor ch : c) {
+		for (CharActor ch : c) {		score = 0;
+		pass = false;
+
 			chars.remove(ch);
 		}
 		fillChars(sc);

@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -20,6 +21,7 @@ public class ScrabbleMain extends ApplicationAdapter implements InputProcessor {
 	BitmapFont font;
 	ScreenViewport viewport;
 	Stage stage;
+	Texture end;
 	
 	@Override
 	public void create () {
@@ -29,6 +31,7 @@ public class ScrabbleMain extends ApplicationAdapter implements InputProcessor {
 		viewport = new ScreenViewport();
 	    stage = new Stage(viewport, batch);
 		game.board.viewport = viewport;
+		end = new Texture(Gdx.files.internal("Ende.png"));
 		
 		InputMultiplexer inputM = new InputMultiplexer();
 		inputM.addProcessor(stage);
@@ -46,7 +49,7 @@ public class ScrabbleMain extends ApplicationAdapter implements InputProcessor {
 	public void render () {
 		viewport.apply();
 		Gdx.gl.glClearColor(1, 1, 1, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);;
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.setProjectionMatrix(viewport.getCamera().combined);
         shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
 
@@ -77,13 +80,13 @@ public class ScrabbleMain extends ApplicationAdapter implements InputProcessor {
         stage.draw();
         
         if (game.gameFinished) {
-//        	game.drawOverlay(shapeRenderer);
-        	shapeRenderer.begin(ShapeType.Filled);
-        	shapeRenderer.setColor(0, 0, 0, 0);
-        	shapeRenderer.rect(0, 0, viewport.getScreenWidth(), viewport.getScreenHeight());
-        	shapeRenderer.end();
-        	
+        	batch.begin();
+        	batch.draw(end, viewport.getScreenWidth()/2 - 175, viewport.getScreenHeight()/2 - 41);
+        	batch.end();
         }
+        
+
+        
 	}
 	
 	@Override
@@ -105,6 +108,8 @@ public class ScrabbleMain extends ApplicationAdapter implements InputProcessor {
 			}
 			game.nextPlayer();
 			return true;
+		} else if (Input.Keys.R == arg0 && !game.gameFinished) {
+			game.checkNot = true;
 		}
 		return false;
 	}

@@ -84,7 +84,6 @@ public class CharActor extends Actor {
         	player.delChar(this);
     	} else {
     		if (board.isInChangingArea(new Vector2(getX(), getY()))) {
-//    			System.out.println("Erfolgreich!");
     			player.currentTrashChars.add(this);
     			player.delChar(this);
     		}
